@@ -1,5 +1,7 @@
 import "../styles/landing.css";
-import LandingFlow from "../components/landing-flow";
+import LandingFlow from "../components/landingFlow";
+import { useNavigate } from "react-router-dom";
+
 
 
 // 1) Intro Section            --> DONE
@@ -11,6 +13,17 @@ import LandingFlow from "../components/landing-flow";
 // 7) Call to Action Section   --> DONE
 
 function Landing() {
+
+  const navigate = useNavigate();
+
+  const handleSignUp = async () => {
+    navigate(`/signup`);
+  }
+
+  const handleLogin = async () => {
+    navigate(`/login`);
+  }
+
   return (
 
     <div className="landing-page">
@@ -34,8 +47,8 @@ function Landing() {
       <section className="auth1">
         <h1 className="auth-title">Let's get started!</h1>
         <div className="auth-buttons">
-          <button className="signup-btn">Sign Up</button>
-          <button className="login-btn">Log In</button>
+          <button className="signup-btn" onClick={handleSignUp}>Sign Up</button>
+          <button className="login-btn" onClick={handleLogin}>Log In</button>
         </div>
       </section>
 
@@ -160,8 +173,8 @@ function Landing() {
         <section className="auth2">
         <h1 className="auth-title2">Start Building Now!</h1>
         <div className="auth-buttons">
-          <button className="signup-btn">Sign Up</button>
-          <button className="login-btn">Log In</button>
+          <button className="signup-btn" onClick={handleSignUp}>Sign Up</button>
+          <button className="login-btn" onClick={handleLogin}>Log In</button>
         </div>
       </section>
       
