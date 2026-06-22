@@ -20,7 +20,10 @@ function Dashboard(){
             {/* <div className="background-image"></div> */}
             <div className="section">
                 <nav className="nav-section">
-                    <h1> <img src="/icon2.png" className="profile-icon" /> DevPath AI</h1>
+                    <div className="left-nav">
+                        <img src="/icon2.png" className="profile-icon" />
+                        <h1> DevPath AI</h1>
+                    </div>
                     <div className="right-nav">
                     <h1>hello {decodeURIComponent(name)}!! </h1>
                     {/* <img src="/icon2.png" className="profile-icon" /> */}
@@ -37,18 +40,14 @@ function Dashboard(){
                 <div className="dashboard-section">
                     <div className="ws-section">
                         <div className="ws-container">
-                            <h1 className="title-text">Active Workspaces</h1>
+                            <h1 className="title-text2">Active Workspaces</h1>
                             {activeWorkspaces.length === 0 ? (
                                 <div className="empty-state">
-                                    <h1 className="reg-text">No active workspaces yet.</h1>
+                                    <h1 className="reg-text2">No active workspaces yet.</h1>
                                     <div className="ghost">
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
+                                        <img src="/icon17.png" className="ghost-icon" />
                                     </div>
-                                    <p className="reg-text">Click the + to create a workspace</p>
+                                    <p className="reg-text2">Click the + to create a workspace</p>
                                 </div>
                             ) : (
                                 activeWorkspaces.map((title) => (
@@ -65,31 +64,33 @@ function Dashboard(){
                         <div className="background-image"></div>
                         <div className="about1">
                         <div>
-                        <h1 className="title-text">Structured guidance from idea to deployment.</h1>
+                        <h1 className="title-text2">Structured guidance <span className="title-text">from idea to deployment.</span> </h1>
                         <h1 className="reg-text">DevPath AI is an AI-assisted project planning and execution platform that guides developers from an initial project idea to a complete implementation plan</h1>
-                        <h1 className="reg-text">Modern software development requires developers to make dozens of interconnected decisions before implementation even begins.</h1>
+                        <h1 className="reg-text">Modern software development requires dozens of interconnected decisions before implementation even begins.</h1>
                         {/* <h1 className="reg-text">DevPath AI helps you make the right ones before writing a single line of code.</h1> */}
                         </div>
-                        <div>
-                        <h1 className="title-text">Developers constantly need to make decisions about: </h1>
+                        <div className="decision-section">
+                        <h1 className="title-text3">Developers constantly need to make decisions about: </h1>
                         <div className="decisions-cards">
-                            <div>
+                            {/* <div> */}
                             <h1 className="decision-card">Architecture</h1>
                             <h1 className="decision-card">Features</h1>
-                            </div>
-                            <div>
+                            {/* </div> */}
+                            {/* <div> */}
                             <h1 className="decision-card">Frameworks</h1>
                             <h1 className="decision-card">Deployment</h1>
-                            </div>
-                            <div>
+                            {/* </div> */}
+                            {/* <div> */}
                             <h1 className="decision-card">Databases</h1>
                             <h1 className="decision-card">Integration</h1>
-                            </div>
+                            {/* </div> */}
                         </div>
                         </div>
                         </div>
-                        <h1 className="title-text">Workflow</h1>
+                        <div className="workflow">
+                        <h1 className="title-text1">Workflow</h1>
                         <DashboardFlow/>
+                        </div>
                         
                         
 

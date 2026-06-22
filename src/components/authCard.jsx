@@ -3,7 +3,7 @@ import { useNavigate} from "react-router-dom";
 
 function AuthCard({ type }) {
   const isLogin = type === "Login" ;
-  const title = isLogin ? "Login" : "Signup";
+  const title = isLogin ? "Log In" : "Sign Up";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -9,26 +9,32 @@
 }
 
 .background-auth {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
+    inset:0;
     width: 100%;
+    /* max-width: 1180px; */
     height: 100%;
-    background-image: url("/bg3-1.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: #1d2158;
+    background-image:
+    radial-gradient(circle at 15% 10%,#0d0a4f, transparent 50%),
+    radial-gradient(circle at 85% 0%, rgb(15, 59, 81), transparent 30%),
+    radial-gradient(circle at 50% 80%, rgba(61, 15, 74, 0.678), transparent 50%);
+    
     z-index: -1;
-    opacity: 0.45;
 }
 
 .auth-card {
     position: relative;
     width: min(420px, 100%);
-    background-image: linear-gradient(to bottom, #160662, #0a757e);
+    /* background-image: linear-gradient(to bottom, #160662, #0a757e); */
+    background-color: #324058de;
+    border: 2px solid #193e7fba;
     border-radius: 24px;
     padding: 2rem;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+    /* box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25); */
+    box-shadow: 0 0 50px #163361b5;
     color: #fff;
     z-index: 1;
 }
@@ -36,8 +42,14 @@
 .auth-card h3 {
     margin: 0 0 1.2rem;
     text-align: center;
-    font-size: 2rem;
+    font-size: 3rem;
     letter-spacing: 0.03em;
+    background: linear-gradient(to right,#28dfef 0%, #a06bff 50%, #ff5fd1 100%);
+    background-clip: text;
+    color: transparent;
+    font-family:  "Satoshi", sans-serif;
+    letter-spacing: -0.05em;
+
 }
 
 .auth-form {
@@ -48,6 +60,8 @@
 .auth-form label {
     font-size: 0.95rem;
     font-weight: 600;
+    font-family:  "Inter" , sans-serif;
+    letter-spacing: -0.02em;
 }
 
 .auth-form input {
@@ -58,6 +72,8 @@
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
     outline: none;
+    font-family:  "Inter" , sans-serif;
+    letter-spacing: -0.02em;
 }
 
 .auth-form input::placeholder {
@@ -66,24 +82,26 @@
 
 .auth-form button {
     width: 100%;
-    /* padding: 0.95rem 1rem; */
-    padding-bottom: 0.8rem;
-    padding-top: 0.8rem;
     border: none;
     border-radius: 12px;
-    background: #fff;
     cursor: pointer;
-    font-weight: 700;
-    font-size: 1rem;
-    color: #155672;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    padding: 12px 22px;
+    font-family:  "Inter", sans-serif;
+    letter-spacing: -0.05em;
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #cdd2ef;
+    background: linear-gradient(to right,#09506f 0%, #381479 50%, #6f1255 100%);
+    /* box-shadow: 0 0 50px #8db0e8b5; */
 
 }
 
 
 .auth-form button:hover  {
     transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 50px #8db0e8b5;
 }
 
 .form-error {
@@ -91,6 +109,8 @@
     color: white;
     font-size: 0.95rem;
     text-align: center;
+    font-family:  "Inter" , sans-serif;
+    letter-spacing: -0.05em;
 }
 
 .auth-meta {
@@ -98,6 +118,8 @@
     text-align: center;
     font-size: 0.95rem;
     color: white;
+    font-family:  "Inter" , sans-serif;
+    letter-spacing: -0.05em;
 }
 
 .auth-link{
@@ -108,6 +130,8 @@
     cursor: pointer;
     font: inherit;
     padding: 0;
+    font-family:  "Inter" , sans-serif;
+    letter-spacing: -0.05em;
 }
 
 .auth-link:hover{

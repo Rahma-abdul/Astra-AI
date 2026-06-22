@@ -9,7 +9,7 @@ import "reactflow/dist/style.css";
 const nodes = [
   {
     id: "1",
-    position: { x: 80, y: -50 },
+    position: { x: 80, y: -150 },
     data: { label: "Project Idea" },
     draggable: false,
     style: {
@@ -25,7 +25,7 @@ const nodes = [
 
   {
     id:"2",
-    position: {x:300 , y:-150},
+    position: {x:300 , y:-200},
     data: {label: "Feature Selection"},
     draggable: false,
     style: {
@@ -41,7 +41,7 @@ const nodes = [
 
   {
     id:"3",
-    position: {x:300 , y:50},
+    position: {x:300 , y:-80},
     data: {label: "Stack Selection"},
     draggable: false,
     style: {
@@ -57,7 +57,7 @@ const nodes = [
 
   {
     id:"4",
-    position: {x:600 , y:-50},
+    position: {x:700 , y:-150},
     data: {label: "Feasibility Analysis"},
     draggable: false,
     style: {
@@ -73,7 +73,7 @@ const nodes = [
 
   {
     id:"5",
-    position: {x:900 , y:-50},
+    position: {x:1000 , y:-150},
     data: {label: "Architecture"},
     draggable: false,
     style: {
@@ -89,7 +89,7 @@ const nodes = [
 
   {
     id:"6",
-    position: {x:950 , y:150},
+    position: {x:1000 , y:30},
     data: {label: "Roadmap"},
     draggable: false,
     style: {
@@ -105,7 +105,7 @@ const nodes = [
 
   {
     id:"7",
-    position: {x:650 , y:150},
+    position: {x:700 , y:30},
     data: {label: "Workspace"},
     draggable: false,
     style: {
@@ -121,7 +121,7 @@ const nodes = [
 
   {
     id:"8",
-    position: {x:350 , y:150},
+    position: {x:400 , y:30},
     data: {label: "Build & Deploy"},
     draggable: false,
     style: {
@@ -137,7 +137,7 @@ const nodes = [
 
   {
     id:"9",
-    position: {x:100 , y:150},
+    position: {x:100 , y:30},
     data: {label: "Documentation"},
     draggable: false,
     style: {
@@ -302,9 +302,12 @@ function LandingFlow() {
     <div
       style={{
         width: "100%",
-        height: "450px",
+        height: "350px",
         // borderRadius: "240px",
         overflow: "hidden",
+        fontFamily: "'Inter',  sans-serif ",
+        letterSpacing: "-0.05em",
+        // fontWeight "800",
       }}
     >
       <ReactFlow

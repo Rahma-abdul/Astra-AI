@@ -3,15 +3,6 @@ import LandingFlow from "../components/landingFlow";
 import { useNavigate } from "react-router-dom";
 
 
-
-// 1) Intro Section            --> DONE
-// 2) Avoid Hell Section       --> DONE
-// 3) Benefits Section         --> DONE  
-// 4) Flow chart Section       --> DONE
-// 5) Rewards Section          --> DONE
-// 6) Supported Project Types  --> DONE
-// 7) Call to Action Section   --> DONE
-
 function Landing() {
 
   const navigate = useNavigate();
@@ -28,12 +19,13 @@ function Landing() {
 
     <div className="landing-page">
       <div className="background-image"></div>
+      <div className="landing-layout">
       <div className="intro-auth">
 
       <section className="intro-section">
         <div className="intro-content">
           <h1 className="title-masked"> <img src="/icon2.png" className="logo-icon" />DevPath AI</h1>
-          <h1 className = "tagline"> Stop researching | Start building </h1>
+          <h1 className = "tagline"> <span style={{ color: "#f2f3f9" }}>Stop researching | </span>Start building </h1>
         </div>
 
         <p className="intro-about">
@@ -55,11 +47,11 @@ function Landing() {
       </div>
 
       
-      <p className="intro-about2">Turn months of scattered research into a structured workspace</p>
+      <p className="intro-about2">Turn months of scattered research into <span style={{color: "#ff5fd1"}}>a structured workspace</span></p>
 
       <section className="problem-section">
           
-          <div className="problem1">
+          <div className="problem">
           <h1 className="problem-title">Research Hell</h1>
           <div className="problem-lines">
             <p>Should I use Express or Serverless?</p>
@@ -68,7 +60,7 @@ function Landing() {
           </div>
           </div>
 
-          <div className="problem2">
+          <div className="problem">
           <h1 className="problem-title">Tutorial Hell</h1>
           <div className="problem-lines">
             <p>Every tutorial is a different stack.</p>
@@ -78,7 +70,7 @@ function Landing() {
           </div>
           </div>
 
-          <div className="problem3">
+          <div className="problem">
           <h1 className="problem-title">Feature Creep</h1>
           <div className="problem-lines">
             <p>What features to implement?</p>
@@ -87,7 +79,7 @@ function Landing() {
           </div>
           </div>
 
-          <div className="problem4">
+          <div className="problem">
           <h1 className="problem-title">Architecture Decisions</h1>
           <div className="problem-lines">
             <p>What architecture to choose?</p>
@@ -96,12 +88,11 @@ function Landing() {
           </div>
           </div>
 
-        <div className="glow1"></div>
         </section>
 
 
-        <h2 className="intro-about2">
-          You don’t need more information. You need direction.
+        <h2 className="intro-about3">
+          You don’t need more information. You need <span style={{color: "#a06bff"}}>direction.</span>
         </h2>
 
         <section className="types-section">
@@ -124,7 +115,6 @@ function Landing() {
 
 
         <section className="flowchart-section">
-          {/* <div className="glow3"></div> */}
           <h1 className="flow-title">How DevPath AI works?</h1>
           
           <LandingFlow/>
@@ -136,7 +126,6 @@ function Landing() {
 
         
         <section className="benefits-section">
-          <div className="glow1"></div>
 
           <h1 className="benefit-title">DevPath AI helps you</h1>
           <div className="benefit-lines-container">
@@ -156,15 +145,13 @@ function Landing() {
           
         </section>
 
-
         <section className="reward-section">
           <h1 className="reward-title">Complete your project and Unlock</h1>
-          {/* <h1 className="reward-title">and Unlock:</h1> */}
           <div className="reward-cards">
-            <div className="card"><h1 className="card-name">Readme File</h1><p>Auto-generated and customized for your project</p><img src="/icon11.png" className="reward-icon" /></div>
+            <div className="card"><h1 className="card-name">Readme File</h1><p>Auto-generated & customized for your project</p><img src="/icon11.png" className="reward-icon" /></div>
             <div className="card"><h1 className="card-name">CV Bullets</h1><p>Ready-made ATS-friendly bullet points for your CV</p> <img src="/icon10.png" className="reward-icon" /></div>
             <div className="card"><h1 className="card-name">Interview Pitch</h1><p>Practice explaining your project clearly for interviews</p> <img src="/icon4.png" className="reward-icon" /></div>
-            <div className="card"><h1 className="card-name">Project Q&A</h1><p>Tailored for your architecture, stack choices, and decisions.</p> <img src="/icon9.png" className="reward-icon" /></div>
+            <div className="card"><h1 className="card-name">Project Q&A</h1><p>Tailored to your architecture, stack choices, and decisions.</p> <img src="/icon9.png" className="reward-icon" /></div>
           </div>
           
         </section>
@@ -179,7 +166,8 @@ function Landing() {
       </section>
       
     <h1 className="credits">Made with absolute love: Rahma Rizk 💕</h1>  
-    <h1 className="credits">All icons by <a href="https://icons8.com" style={{ color: "#160662" }}>Icons8</a></h1>
+    <h1 className="credits">All icons by <a href="https://icons8.com" style={{ color: "#ff5fd2bd" }}>Icons8</a></h1>
+    </div>
     </div>
   );
 }

@@ -9,7 +9,7 @@ import "reactflow/dist/style.css";
 const nodes = [
   {
     id: "1",
-    position: {x:500 , y:-180},
+    position: {x:500 , y:-250},
     data: { label: "Describe Idea" },
     draggable: false,
     style: {
@@ -25,7 +25,7 @@ const nodes = [
 
   {
     id:"2",
-    position: {x:100 , y:-100},
+    position: {x:100 , y:-200},
     data: {label: "Select Features"},
     draggable: false,
     style: {
@@ -41,7 +41,7 @@ const nodes = [
 
   {
     id:"3",
-    position: {x:300 , y:-80},
+    position: {x:300 , y:-150},
     data: {label: "Logistics Determination"},
     draggable: false,
     style: {
@@ -57,7 +57,7 @@ const nodes = [
 
   {
     id:"4",
-    position: {x:500 , y:-60},
+    position: {x:500 , y:-130},
     data: {label: "Feasibility Analysis"},
     draggable: false,
     style: {
@@ -73,7 +73,7 @@ const nodes = [
 
   {
     id:"5",
-    position: {x:700 , y:-40},
+    position: {x:700 , y:-110},
     data: {label: "Pick Tech Stack"},
     draggable: false,
     style: {
@@ -89,7 +89,7 @@ const nodes = [
 
   {
     id:"6",
-    position: {x:900 , y:-20},
+    position: {x:900 , y:-90},
     data: {label: "WorkSpace Created"},
     draggable: false,
     style: {
@@ -105,7 +105,7 @@ const nodes = [
 
   {
     id:"7",
-    position: {x:1000 , y: 100},
+    position: {x:1000 , y: 10},
     data: {label: "Architecture Created"},
     draggable: false,
     style: {
@@ -121,7 +121,7 @@ const nodes = [
 
   {
     id:"8",
-    position: {x:840 , y: 100},
+    position: {x:840 , y: 10},
     data: {label: "RoadMap Built"},
     draggable: false,
     style: {
@@ -137,7 +137,7 @@ const nodes = [
 
   {
     id:"9",
-    position: {x:640 , y:100},
+    position: {x:640 , y:10},
     data: {label: "Learning Resources"},
     draggable: false,
     style: {
@@ -153,7 +153,7 @@ const nodes = [
 
   {
     id:"10",
-    position: {x:440 , y:100},
+    position: {x:440 , y:10},
     data: {label: "Deployment"},
     draggable: false,
     style: {
@@ -169,7 +169,7 @@ const nodes = [
 
   {
     id:"11",
-    position: {x:240 , y:100},
+    position: {x:240 , y:10},
     data: {label: "Documentation"},
     draggable: false,
     style: {
@@ -185,7 +185,7 @@ const nodes = [
 
   {
     id:"12",
-    position: {x:40 , y:100},
+    position: {x:40 , y:10},
     data: {label: "Interview Prep"},
     draggable: false,
     style: {
@@ -213,7 +213,7 @@ const edges = [
     //   type: MarkerType.ArrowClosed,
     // },
     style: {
-    stroke: "#160662",
+    stroke: "#9f8ff0",
     strokeWidth: 2,
   },
   },
@@ -229,7 +229,7 @@ const edges = [
     type: "smoothstep"
     , 
     style: {
-    stroke: "#160662",
+    stroke: "#9f8ff0",
     strokeWidth: 2,
   },
   },
@@ -245,7 +245,7 @@ const edges = [
      type: "smoothstep"
      , 
     style: {
-    stroke: "#160662",
+    stroke: "#9f8ff0",
     strokeWidth: 2,
   },
   },
@@ -261,7 +261,7 @@ const edges = [
     type: "smoothstep"
     , 
     style: {
-    stroke: "#160662",
+    stroke: "#9f8ff0",
     strokeWidth: 2,
   },
   },
@@ -277,7 +277,7 @@ const edges = [
     type: "smoothstep"
     , 
     style: {
-    stroke: "#160662",
+    stroke: "#9f8ff0",
     strokeWidth: 2,
   },
   },
@@ -292,7 +292,7 @@ const edges = [
     type: "smoothstep"
     , 
     style: {
-    stroke: "#160662",
+    stroke: "#9f8ff0",
     strokeWidth: 2,
   },
   },
@@ -308,7 +308,7 @@ const edges = [
     type: "smoothstep"
     , 
     style: {
-    stroke: "#160662",
+    stroke: "#9f8ff0",
     strokeWidth: 2,
   },
   },
@@ -324,7 +324,7 @@ const edges = [
     type: "smoothstep"
     , 
     style: {
-    stroke: "#160662",
+    stroke: "#9f8ff0",
     strokeWidth: 2,
   },
   },
@@ -339,7 +339,7 @@ const edges = [
     type: "smoothstep"
     , 
     style: {
-    stroke: "#160662",
+    stroke: "#9f8ff0",
     strokeWidth: 2,
   },
   },
@@ -354,7 +354,7 @@ const edges = [
     type: "smoothstep"
     , 
     style: {
-    stroke: "#160662",
+    stroke: "#9f8ff0",
     strokeWidth: 2,
   },
   },
@@ -369,7 +369,7 @@ const edges = [
     type: "smoothstep"
     , 
     style: {
-    stroke: "#160662",
+    stroke: "#9f8ff0",
     strokeWidth: 2,
   },
   },
@@ -380,10 +380,12 @@ function LandingFlow() {
     <div
       style={{
         width: "100%",
-        height: "350px",
-        // borderRadius: "240px",
+        height: "250px",
+        borderRadius: "20px",
         overflow: "hidden",
-        marginTop: "-100px"
+        marginTop: "-30px",
+        fontFamily: "'Inter',  sans-serif ",
+        letterSpacing: "-0.05em",
       }}
     >
       <ReactFlow
