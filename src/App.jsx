@@ -4,7 +4,7 @@ import Landing from "./pages/Landing";
 import SignUp from "./pages/Signup";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-
+import CreateWS from "./pages/CreateWS";
 function App() {
   return (
     <BrowserRouter>    
@@ -13,6 +13,7 @@ function App() {
         <Route path="/signup" element={<SignUp/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/dashboard/:name" element ={<Dashboard/>}/>
+        <Route path="/createWS" element={<CreateWS/>}/>
       </Routes>
     </BrowserRouter>
   );

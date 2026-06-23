@@ -1,6 +1,7 @@
 import "../styles/dashboard.css";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate} from "react-router-dom";
+
 import DashboardFlow from "../components/dashboardFlow";
 import ActiveWS from "../components/activeWS";
 
@@ -8,11 +9,18 @@ function Dashboard(){
     const { name } = useParams();
     const [activeWorkspaces, setActiveWorkspaces] = useState([]);
 
-    const addWorkspace = () => {
+    // const addWorkspace = () => {
 
-        const nextIndex = activeWorkspaces.length + 1;
-        setActiveWorkspaces([...activeWorkspaces, `project${nextIndex}`]);
-    };
+    //     const nextIndex = activeWorkspaces.length + 1;
+    //     setActiveWorkspaces([...activeWorkspaces, `project${nextIndex}`]);
+    // };
+
+    const navigate = useNavigate();
+
+    const handleNewWS = async () => {
+
+        navigate(`/createWS`);
+    }
 
     return(
 
@@ -54,7 +62,7 @@ function Dashboard(){
                                     <ActiveWS key={title} title={title} />
                                 ))
                             )}
-                            <button type="button" className="add-ws" onClick={addWorkspace} disabled={activeWorkspaces.length>=2}>
+                            <button type="button" className="add-ws" onClick={handleNewWS} disabled={activeWorkspaces.length>=2}>
                                 <img src="/icon15.png" className="add-icon" alt="Add workspace" />
                             </button>
                             
