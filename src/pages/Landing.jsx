@@ -24,12 +24,12 @@ function Landing() {
 
       <section className="intro-section">
         <div className="intro-content">
-          <h1 className="title-masked"> <img src="/icon2.png" className="logo-icon" />DevPath AI</h1>
+          <h1 className="title-masked"> <img src="/icon2.png" className="logo-icon" />Astra AI</h1>
           <h1 className = "tagline"> <span style={{ color: "#f2f3f9" }}>Stop researching | </span>Start building </h1>
         </div>
 
         <p className="intro-about">
-        DevPath AI is an AI-assisted project planning and execution workspace 
+        AstraAI is an AI-assisted project planning and execution workspace 
         designed for developers who want to build projects themselves 
         rather than have AI build them for them.
         </p>
@@ -115,7 +115,7 @@ function Landing() {
 
 
         <section className="flowchart-section">
-          <h1 className="flow-title">How DevPath AI works?</h1>
+          <h1 className="flow-title">How Astra AI works?</h1>
           
           <LandingFlow/>
         </section>
@@ -127,7 +127,7 @@ function Landing() {
         
         <section className="benefits-section">
 
-          <h1 className="benefit-title">DevPath AI helps you</h1>
+          <h1 className="benefit-title">Astra AI helps you</h1>
           <div className="benefit-lines-container">
             <div>
             <p className="benefit-lines">Define scope</p>

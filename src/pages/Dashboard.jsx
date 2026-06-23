@@ -30,7 +30,7 @@ function Dashboard(){
                 <nav className="nav-section">
                     <div className="left-nav">
                         <img src="/icon2.png" className="profile-icon" />
-                        <h1> DevPath AI</h1>
+                        <h1> Astra AI</h1>
                     </div>
                     <div className="right-nav">
                     <h1>hello {decodeURIComponent(name)}!! </h1>
@@ -73,7 +73,7 @@ function Dashboard(){
                         <div className="about1">
                         <div>
                         <h1 className="title-text2">Structured guidance <span className="title-text">from idea to deployment.</span> </h1>
-                        <h1 className="reg-text">DevPath AI is an AI-assisted project planning and execution platform that guides developers from an initial project idea to a complete implementation plan</h1>
+                        <h1 className="reg-text">Astra AI is an AI-assisted project planning and execution platform that guides developers from an initial project idea to a complete implementation plan</h1>
                         <h1 className="reg-text">Modern software development requires dozens of interconnected decisions before implementation even begins.</h1>
                         {/* <h1 className="reg-text">DevPath AI helps you make the right ones before writing a single line of code.</h1> */}
                         </div>
