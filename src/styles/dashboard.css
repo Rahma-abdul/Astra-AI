@@ -102,7 +102,7 @@
     /* margin-top: 13px;
     padding-right: 20px; */
     /* padding-left: 20px; */
-    transition: 0.3s;
+    transition: 0.6s;
     transform-origin: center;
 }
 
@@ -135,7 +135,7 @@
 }
 
 .settings-icon:hover{
-    transform: rotate(90deg);
+    transform: rotate(180deg);
 }
 
 .dashboard-section{
@@ -199,6 +199,7 @@
 
 .add-ws:hover{
     transform:scale(1.1) ;
+    cursor: pointer;
 }
 
 .add-ws:disabled{

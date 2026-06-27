@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import "../styles/newWS.css";
 
 
@@ -14,8 +14,45 @@ function CreateWS(){
     const [complexity , setComplexity] = useState("Medium");
     const [duration , setDuration] = useState("73");
 
-    const [showStack , setShowStack] =useState(false);
+    // In case user cancels 
+    const [draftComplexity , setDraftComplexity] = useState(complexity);
+    const [draftDuration , setDraftDuration] = useState(duration);
 
+
+
+    const [showOthers , setShowOthers] =useState(false);
+
+    const architectureOptions = {
+        recommended: "Serverless" ,
+        alternatives: ["Monolithic Backend", "Microservices"]
+
+    }
+    const otherOptions ={
+        
+    frontend: {
+        recommended: "React",
+        alternatives: ["Vue", "Angular"]
+    },
+    backend: {
+        recommended: "Express",
+        alternatives: ["FastAPI", "Django"]
+    },
+    database: {
+        recommended: "PostgreSQL",
+        alternatives: ["MongoDB", "MySQL"]
+    }
+    };
+
+    const [selectedArchitecture, setSelectedArchitecture] = useState(architectureOptions.recommended);
+    // selected stack mesh darory dol bas --> fix it later
+    const [selectedStack, setSelectedStack] = useState({
+        frontend: otherOptions.frontend.recommended,
+        backend: otherOptions.backend.recommended,
+        database: otherOptions.database.recommended
+    });
+
+    const [draftArch , setDraftArch] = useState(selectedArchitecture);
+    const [draftStack , setDraftStack] = useState(selectedStack);
 
 
 
@@ -38,8 +75,23 @@ function CreateWS(){
 
     const modifyComplexity_Duration =() =>{
         // Close modal after user saves changes
+        setComplexity(draftComplexity);
+        setDuration(draftDuration);
         setShowModify(false);
     }
+
+    const modifyArch_Stack = () => {
+        setSelectedArchitecture(draftArch);
+        setSelectedStack(draftStack);
+        setShowOthers(false);
+
+    }
+
+    const isAllRecommended =
+    selectedArchitecture === architectureOptions.recommended &&
+    Object.entries(otherOptions).every(
+        ([stack, options]) => selectedStack[stack] === options.recommended
+    );
     // {stage === 1 && <IdeaCard />}  // mame and idea 
     // {stage === 2 && <FeatureCard />} // extracted features
     // {stage === 3 && <ScopeCard />} // goal, timeline, budget and focus
@@ -59,9 +111,32 @@ function CreateWS(){
             setStage(stage +1);
     };
 
+    const getProgress = () => {
+    if (loading && stage === 1) return 8;
+    if (loading && stage === 3) return 55;
+    if (loading && stage === 4) return 75;
+    if (loading && stage === 5) return 100.1;
+    switch (stage) {
+        case 1: return 2;
+        case 2: return 20;
+        case 3: return 45;
+        case 4: return 65;
+        case 5: return 90;
+        default: return 0;
+    }
+};
+
+    // to stop the scrolling of the page once any modal is active
+    useEffect(() => {
+    const anyModalOpen = showModal || showModify || showOthers;
+        document.body.style.overflow = anyModalOpen ? "hidden" : "auto";
+    }, [showModal, showModify, showOthers]);
+
     return(
         <div className="createWS-page">
             <div className="background-createWS"></div>
+            <img src="/icon2.png" className="big-profile-icon" />
+                   
             <div className="progress">
                 <div className={`progress-step ${stage>=1? "active": ""}`}>Idea</div>
                 <div className={`progress-step ${stage>=2? "active": ""}`}>Features</div>
@@ -69,14 +144,19 @@ function CreateWS(){
                 <div className={`progress-step ${stage>=4? "active": ""}`}>Feasibility</div>
                 <div className={`progress-step ${stage>=5? "active": ""}`}>Architecture</div>
             </div>
+            <div className="progress-meter">
+                <span style={{ width: `${getProgress()}%` }}></span>
+            </div>
+
             
             {(loading && stage === 1 )? (
                 <>
-                <div className="progress-meter">
+                {/* <div className="progress-meter">
                      <span style={{width: "8%"}}></span>
-                    </div>
+                    </div> */}
                 <div className="ws-card">
                     <h3>Analyzing <span style={{color: "white"}}>your project</span></h3>
+                    <img src="/icon20.png" className="loading-icon" />
                     <div className="loading-list">
                         <p>Understanding project idea</p>
                         <p>Extracting features</p>
@@ -85,11 +165,12 @@ function CreateWS(){
                 </>
             ):(loading && stage === 3 )? (
                 <>
-                <div className="progress-meter">
+                {/* <div className="progress-meter">
                      <span style={{width: "50%"}}></span>
-                    </div>
+                    </div> */}
                 <div className="ws-card">
                     <h3>Running <span style={{color: "white"}}>Feasibility Analysis</span></h3>
+                    <img src="/icon20.png" className="loading-icon" />
                     <div className="loading-list">
                         <p>Calculation Complexity</p>
                         <p>Estimating Duration</p>
@@ -99,11 +180,12 @@ function CreateWS(){
                 </>
             ):(loading && stage === 4 )? (
                 <>
-                <div className="progress-meter">
+                {/* <div className="progress-meter">
                      <span style={{width: "70%"}}></span>
-                    </div>
+                    </div> */}
                 <div className="ws-card">
                     <h3><span style={{color: "white"}}>Generating</span> Architecture Recommendation</h3>
+                    <img src="/icon20.png" className="loading-icon" />
                     <div className="loading-list">
                         <p>Generating list of stack options</p>
                         <p>Collecting pros and cons</p>
@@ -112,20 +194,21 @@ function CreateWS(){
                 </>
             ):(loading && stage === 5 )? (
                 <>
-                <div className="progress-meter">
+                {/* <div className="progress-meter">
                      <span style={{width: "100%"}}></span>
-                    </div>
+                    </div> */}
                 <div className="ws-card">
                     <h3>Creating Your Workspace</h3>
+                    <img src="/icon20.png" className="loading-icon" />
                 </div>
                 </>
             ):(
                 <>
                 { stage === 1 && (
                     <>
-                    <div className="progress-meter">
+                    {/* <div className="progress-meter">
                      <span style={{width: "2%"}}></span>
-                    </div>
+                    </div> */}
                     <div className="ws-card">
                     <h3><span style={{color: "white"}}>Create New</span> Workspace</h3>
                     <h2>Workspace Name</h2>
@@ -138,9 +221,9 @@ function CreateWS(){
                 )}
                 { stage === 2 && (
                     <>
-                    <div className="progress-meter">
+                    {/* <div className="progress-meter">
                      <span style={{width: "20%"}}></span>
-                    </div>
+                    </div> */}
                     <div className="ws-card">
                     <h3><span style={{color: "white"}}>AI Extracted</span> Features</h3>
                     <h2>Pick which ones fit your idea best</h2>
@@ -161,9 +244,9 @@ function CreateWS(){
                 )}
                 { stage === 3 && (
                     <>
-                    <div className="progress-meter">
+                    {/* <div className="progress-meter">
                      <span style={{width: "40%"}}></span>
-                    </div>
+                    </div> */}
                     <div className="ws-card">
                     <h3><span style={{color: "white"}}>Tell Us</span> More</h3>
                     <label style={{fontSize: "1.5rem"}}>Goal</label>
@@ -208,9 +291,9 @@ function CreateWS(){
                 )}
                 { stage === 4 && (
                     <>
-                    <div className="progress-meter">
+                    {/* <div className="progress-meter">
                      <span style={{width: "60%"}}></span>
-                    </div>
+                    </div> */}
                     <div className="ws-card">
                     <h3><span style={{color: "white"}}>AI ran</span> Feasibility Analysis</h3>
             
@@ -224,37 +307,52 @@ function CreateWS(){
                             <p>Might need to change the budget plan</p>
                         </div>
                     </div>
-                    <button onClick={()=>setShowModify(true)}>Modify</button>
+                    <button onClick={()=>{ setDraftComplexity(complexity); setDraftDuration(duration); setShowModify(true);}}>Modify</button>
                     <button onClick={nextStage}>Confirm</button>
                     </div>
                     </>
                 )}
                 { stage === 5 && (
                     <>
-                    <div className="progress-meter">
+                    {/* <div className="progress-meter">
                      <span style={{width: "80%"}}></span>
-                    </div>
+                    </div> */}
                     <div className="ws-card">
                     <h3><span style={{color: "white"}}>Architecture & Stack</span> Generation</h3>
-                    <h2>Recommended Stack:</h2>
+                    
+                    {/* {isAllRecommended && (<h2 style={{ background: "linear-gradient(to right,#28dfef 0%, #a06bff 50%, #ff5fd1 100%)", backgroundClip: "text",color: "transparent" , textAlign: "center"}}>Recommended</h2>)} */}
+                    <h2>{isAllRecommended && (<h2 style={{ background: "linear-gradient(to right,#28dfef 0%, #a06bff 50%, #ff5fd1 100%)", backgroundClip: "text",color: "transparent"}}>Recommended</h2>)}Architecture:</h2>
+                    <div className="regular-list">
+                        <p><span style={{color: "#958fe5" , fontSize: "1.4rem"}}>{selectedArchitecture} </span></p>
+                    </div>
+                    <h2>Stack:</h2>
                         <div className="regular-list">
-                            <p><span style={{color: "#958fe5" , fontSize: "1.4rem"}}>Frontend: </span> React.js</p>
+                            {/* <p><span style={{color: "#958fe5" , fontSize: "1.4rem"}}>Frontend: </span> React.js</p>
                             <p><span style={{color: "#958fe5" , fontSize: "1.4rem"}}>Backend: </span> Express.js</p>
                             <p><span style={{color: "#958fe5" , fontSize: "1.4rem"}}>Database: </span> Supabase</p>
-                            <p><span style={{color: "#958fe5" , fontSize: "1.4rem"}}>Deployment: </span> Vercel</p>
+                            <p><span style={{color: "#958fe5" , fontSize: "1.4rem"}}>Deployment: </span> Vercel</p> */}
+                            {Object.entries(selectedStack).map(([stack , options]) => (
+                            <p key={stack}><span style={{color: "#958fe5" , fontSize: "1.4rem"}}>{stack.charAt(0).toUpperCase() + stack.slice(1)}:</span> {options}</p>
+                            ))}
                         </div>
+                    {isAllRecommended && (
+                    <>
                     <h2>Why?</h2>
                     <div className="regular-list">
-                            <p><span style={{color: "#958fe5" , fontSize: "1.1rem"}}>React simplifies building dynamic user interfaces through a modular, predictable, and highly efficient development paradigm.</span></p>
-                            <p><span style={{color: "#958fe5" , fontSize: "1.1rem"}}>Express provides a thin layer of fundamental web application features without obscuring Node.js features. </span></p>
-                            <p><span style={{color: "#958fe5" , fontSize: "1.1rem"}}>Supabase pairs a real PostgreSQL database with an automated, built-in suite of backend features.</span></p>
-                            <p><span style={{color: "#958fe5" , fontSize: "1.1rem"}}>Vercel offers zero-configuration Git integration, instant preview URLs for every pull request, and automatic global edge rendering.</span></p>
+                            <p><span style={{color: "#958fe5" , fontSize: "1.1rem"}}>
+                                React simplifies building dynamic user interfaces through a modular, predictable, and highly efficient development paradigm. 
+                                Express provides a thin layer of fundamental web application features without obscuring Node.js features. 
+                                Supabase pairs a real PostgreSQL database with an automated, built-in suite of backend features.
+                                Vercel offers zero-configuration Git integration, instant preview URLs for every pull request, and automatic global edge rendering.
+                            </span></p>
                         </div>
-
-                    <button>Other Stack Options</button>
+                    </>
+                    )}
+                    <button onClick={()=>{ setDraftArch(selectedArchitecture); setDraftStack(selectedStack); setShowOthers(true)}}>Other Stack Options</button>
                     <button onClick={nextStage}>Continue</button>
                     </div>
                     </>
+                    
                 )}
                
                 </>
@@ -315,8 +413,8 @@ function CreateWS(){
                                 type="radio"
                                 name="complexity"
                                 value="Beginner"
-                                checked={complexity === "Beginner"}
-                                onChange={(e) => setComplexity(e.target.value)}
+                                checked={draftComplexity === "Beginner"}
+                                onChange={(e) => setDraftComplexity(e.target.value)}
                             />
                             Beginner
                         </h2>
@@ -325,8 +423,8 @@ function CreateWS(){
                                 type="radio"
                                 name="complexity"
                                 value="Medium"
-                                checked={complexity === "Medium"}
-                                onChange={(e) => setComplexity(e.target.value)}
+                                checked={draftComplexity === "Medium"}
+                                onChange={(e) => setDraftComplexity(e.target.value)}
                             />
                             Medium
                         </h2>
@@ -335,8 +433,8 @@ function CreateWS(){
                                 type="radio"
                                 name="complexity"
                                 value="Expert"
-                                checked={complexity === "Expert"}
-                                onChange={(e) => setComplexity(e.target.value)}
+                                checked={draftComplexity === "Expert"}
+                                onChange={(e) => setDraftComplexity(e.target.value)}
                             />
                             Expert
                         </h2>
@@ -348,8 +446,8 @@ function CreateWS(){
                     <input
                         type="number"
                         placeholder="Example: 53"
-                        value={duration}
-                        onChange={(e)=>setDuration(e.target.value)}
+                        value={draftDuration}
+                        onChange={(e)=>setDraftDuration(e.target.value)}
                     />
 
                     <div className="modal-buttons">
@@ -365,6 +463,90 @@ function CreateWS(){
                         <button
                             type="button"
                             onClick={modifyComplexity_Duration}
+                        >
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+            )}
+
+            {showOthers && (
+            <div className="modal-overlay">
+
+                <div className="modal-card">
+
+                        <h2>Alternative Architecture</h2>
+                        <div className="timeline-container">
+                        {/* <h2 style={{fontSize: "1.1rem"}}>
+                            <input
+                                type="radio"
+                                name="complexity"
+                                value="Beginner"
+                                checked={complexity === "Beginner"}
+                                onChange={(e) => setComplexity(e.target.value)}
+                            />
+                            Beginner
+                        </h2> */}
+                       
+                        {[architectureOptions.recommended, ...architectureOptions.alternatives].map(arch => (
+                            <h2 style={{fontSize: "1.1rem"}} key={arch}>
+                            <input
+                                type="radio"
+                                value={arch}
+                                checked={draftArch === arch}
+                                onChange={(e) => setDraftArch(e.target.value)}
+                            />
+                            {arch}
+                        </h2>
+                        ))}
+                        </div>
+
+                        <h2>Alternative Stack</h2>
+                        <div className="timeline-container">
+                        
+                        {Object.entries(otherOptions).map(([stack , options]) => (
+                            <>
+                            <h2 style={{fontSize: "1.1rem"}} key={stack}>{stack.charAt(0).toUpperCase() + stack.slice(1)}:</h2>
+                            {[options.recommended, ...options.alternatives].map(choice => (
+                            <h2 style={{fontSize: "1rem", paddingLeft: "1.5rem"}} key={choice}>
+                                <input
+                                    type="radio"
+                                    name={stack}
+                                    value={choice}
+                                    checked={draftStack[stack] === choice}
+                                    onChange={(e) =>
+                                        setDraftStack({ ...draftStack, [stack]: e.target.value })
+                                    }
+                                />
+                                {choice}
+                            </h2>
+                            ))}
+                            
+                        </>
+                        ))} 
+                        
+                        
+                        </div>
+                    
+                    
+                    
+                    <div className="modal-buttons">
+
+                        <button
+                            type="button"
+                            className="cancel-btn"
+                            onClick={()=>setShowOthers(false)}
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={modifyArch_Stack}
                         >
                             Save
                         </button>
