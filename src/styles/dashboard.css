@@ -30,7 +30,7 @@
 }
 
 .nav-section{
-    background-color:#210f4a;
+    background-color:#08163e;
     width: 100%;
     /* outline: 0.7rem solid #210f4a; */
     display: flex;
@@ -47,7 +47,7 @@
     padding-bottom: 8px;
     z-index: 1000;
     height: 3rem;
-    border-bottom: 1.5px solid #b3c8ecf5;
+    border-bottom: 1.5px solid #a0aabdf5;
     
 }
 /* 

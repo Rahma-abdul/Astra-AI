@@ -1,6 +1,6 @@
 import { useState , useEffect} from "react";
+import { useNavigate} from "react-router-dom";
 import "../styles/newWS.css";
-
 
 
 function CreateWS(){
@@ -92,15 +92,18 @@ function CreateWS(){
     Object.entries(otherOptions).every(
         ([stack, options]) => selectedStack[stack] === options.recommended
     );
-    // {stage === 1 && <IdeaCard />}  // mame and idea 
-    // {stage === 2 && <FeatureCard />} // extracted features
-    // {stage === 3 && <ScopeCard />} // goal, timeline, budget and focus
-    // {stage === 4 && <FeasibilityCard />} // after feasibility --> complexity, est time, risk
-    // {stage === 5 && <StackCard />} // stack options 
+    
 
     const nextStage = () =>{
         setLoading(true);
 
+        if (stage === 5) {
+            setTimeout(() => {
+            setLoading(false);
+             navigate(`/WS`);
+        }, 2500);
+        }
+        
         setTimeout(() => {
             setLoading(false);
             setStage(stage +1);
@@ -131,6 +134,10 @@ function CreateWS(){
     const anyModalOpen = showModal || showModify || showOthers;
         document.body.style.overflow = anyModalOpen ? "hidden" : "auto";
     }, [showModal, showModify, showOthers]);
+
+    
+    const navigate = useNavigate();
+
 
     return(
         <div className="createWS-page">

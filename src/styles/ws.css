@@ -1,0 +1,210 @@
+.ws-page {
+    position: relative;
+    margin-left: -10px;
+    
+}
+
+.ws-background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    inset:0;
+    width: 100%;
+    /* max-width: 1180px; */
+    height: 100%;
+    background: #1d2158;
+    /* background-image: url("/bg3-1.jpg"); */
+    /* background-image: linear-gradient(rgb(255, 255, 255), red);     */
+    background-image:
+    radial-gradient(circle at 15% 10%,#0d0a4f, transparent 50%),
+    radial-gradient(circle at 85% 0%, rgb(15, 59, 81), transparent 30%),
+    radial-gradient(circle at 50% 80%, rgba(61, 15, 74, 0.678), transparent 50%);
+    
+    z-index: -1;
+   }
+
+
+.ws-nav{
+    background-color:#08163e;
+    width: 100%;
+    display: flex;
+    /* align-items: center; */
+    /* align-items:end; */
+    position: sticky;
+    top: 0;
+    gap: 1rem;
+    font-size: 0.75em;
+    color: #ffffff;
+    margin-top: -10px;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    z-index: 1000;
+    height: 3rem;
+    border-bottom: 1.5px solid #a0aabdf5;
+    padding-left: 40px ;
+    font-family:  "Satoshi", sans-serif;
+    letter-spacing: -0.05em;
+
+   
+}
+
+.ws-nav h1{
+    margin: 0;
+    background: linear-gradient(to right,#28dfef 0%, #a06bff 50%, #ff5fd1 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    align-self: last baseline;
+
+}
+
+.ws-profile-icon{
+    position: relative;
+    height: 30px;
+    vertical-align:baseline;
+    margin-top: 13px;
+
+}
+
+.ws-area{
+    padding-left: 20px;
+}
+
+.project-name{
+    background: linear-gradient(to top, #28dfef, #ff5fd1);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-size: 3rem;
+    font-family:  "Satoshi", sans-serif;
+    letter-spacing: -0.05em;
+    padding-left: 20px ;
+    text-align: center;
+}
+
+
+.ws-progress-meter {
+    box-sizing: content-box;
+    height: 25px; 
+    width: 1100px;
+    position: relative;
+    background-color: #324058de;
+    border: 2px solid #193e7fba;
+    border-radius: 20px;
+    /* padding: 10px; */
+    box-shadow: 0 0 50px #163361b5;   
+    margin-bottom: 1rem;
+    margin-top: 30px;
+    justify-self: center;
+}
+.ws-progress-meter span {
+    display: block;
+    height: 100%;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background-color: rgb(43, 194, 83);
+    background-image: linear-gradient(to right,#28dfef 0%, #a06bff 50%, #ff5fd1 100%);
+    position: relative;
+    overflow: hidden;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ws-layout{
+    /* background: linear-gradient(135deg , #034b6c, #4b3e8a ); */
+    background-color: #0c1e3e;
+    border: 1.5px solid #203963;
+    border-radius: 20px;
+    padding-left: 5px;
+    padding-right: 20px;
+    color: #9699b8;
+    font-size: 1.1rem;
+    font-family:  "Inter", sans-serif;
+    letter-spacing: -0.05em;
+}
+
+.section-name{
+    background: linear-gradient(to left,#78adeb, #f072e6 );
+    background-clip: text;
+    color: transparent;
+    /* color: white; */
+    font-size: 1.8rem;
+    font-family:  "Satoshi", sans-serif;
+    letter-spacing: -0.05em;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.ws-layout h2{
+    background: linear-gradient(to left,#2eb0bc, #8557db );
+    background-clip: text;
+    color: transparent;
+    font-size: 1.5rem;
+    font-family:  "Satoshi", sans-serif;
+    letter-spacing: -0.05em;
+    padding-left: 20px ;
+}
+
+.description{
+    color: #9699b8;
+    font-size: 1.1rem;
+    font-family:  "Inter", sans-serif;
+    letter-spacing: -0.05em;
+    padding-left: 50px;
+    margin-top: -5px;
+
+}
+
+.features-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: 50px;
+    gap:1rem;
+}
+
+.features-list p{
+    background-color: #182d51;
+    border-radius: 24px;
+    border: 1px solid rgb(210, 210, 219);
+    padding: 10px;
+
+}
+
+.stack-list{
+    display: flex;
+    flex-direction: row;
+    gap:2rem;
+    justify-content: space-evenly;
+}
+
+.diagram{
+    justify-self: center;
+    justify-items: center;
+    
+}
+
+.layer{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+
+}
+
+.layer-element{
+    background-color: #182d51;
+    border-radius: 14px;
+    border: 1px solid rgb(210, 210, 219);
+    padding: 10px;
+    box-shadow: 0 0 10px #6478976d;
+
+}
+
+.layer-icon{
+    height: 20px;
+    display: block;
+}
+
+

@@ -5,6 +5,7 @@ import SignUp from "./pages/Signup";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import CreateWS from "./pages/CreateWS";
+import Workspace from "./pages/WorkSpace";
 function App() {
   return (
     <BrowserRouter>    
@@ -14,6 +15,7 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/dashboard/:name" element ={<Dashboard/>}/>
         <Route path="/createWS" element={<CreateWS/>}/>
+        <Route path="/WS" element={<Workspace/>}/>
       </Routes>
     </BrowserRouter>
   );
