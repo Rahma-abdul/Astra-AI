@@ -8,19 +8,22 @@ import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req ,res){
     
-    if (req.method !== "POST") {
-        return res.status(405).json({
-            error: "Only POST requests are allowed."
-        });
-    }
+    // if (req.method !== "POST") {
+    //     return res.status(405).json({
+    //         error: "Only POST requests are allowed."
+    //     });
+    // }
 
     // console.log(process.env);
     // console.log(process.env.GEMINI_API_KEY);
+    console.log("Before AI created");
 
     const ai = new GoogleGenAI({
         apiKey: process.env.GEMINI_API_KEY
     });
     
+    console.log("AI created");
+
     try{
 
         const {projectName , idea} = req.body;
@@ -52,11 +55,15 @@ export default async function handler(req ,res){
             
         `;
 
+         console.log("Calling ai");
+
         const response = await ai.models.generateContent({
             model:"gemini-2.5-flash" ,
             contents: prompt
         });
-        
+
+         console.log("AI replied");
+
 
         const text = response.text.replace(/```json/g,"").replace(/```/g,"").trim();
 
@@ -69,7 +76,9 @@ export default async function handler(req ,res){
         console.error(err);
 
         return res.status(500).json({
-            error: "Failed to generate features."
+            // error: "Failed to generate features."
+            error: err.message,
+            stack: err.stack,
         });
 
     }

@@ -166,6 +166,12 @@ function CreateWS(){
 
             const data = await response.json();
             
+            if (!response.ok) {
+                console.error("Error extracting features:", data.error);
+                alert(data.error || "Failed to extract features.");
+                setLoading(false);
+                return;
+            }
             const featuresArray = data.features.map(feature => feature.name);
             setFeatures(featuresArray);
             setStage(stage + 1);
