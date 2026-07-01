@@ -37,7 +37,7 @@ function Dashboard(){
                     {/* <img src="/icon2.png" className="profile-icon" /> */}
                     <div className="settings">
                         <img src="/icon14.png" className="settings-icon" />
-                        <div class="dropdown-settings">
+                        <div className="dropdown-settings">
                             <a href="#">Change Username</a>
                             <a href="#">Delete Account</a>
                         </div>

@@ -7,6 +7,11 @@ function CreateWS(){
 
     const [stage ,setStage] = useState(1);
     const [loading , setLoading] = useState(false);
+
+    const [workspaceName , setWorkspaceName] = useState("");
+    const [projectIdea , setProjectIdea] = useState("");
+    
+    const [features , setFeatures] = useState([]);
     const [newFeature , setNewFeature] = useState("");
     const [showModal , setShowModal] =useState(false);
 
@@ -17,7 +22,6 @@ function CreateWS(){
     // In case user cancels 
     const [draftComplexity , setDraftComplexity] = useState(complexity);
     const [draftDuration , setDraftDuration] = useState(duration);
-
 
 
     const [showOthers , setShowOthers] =useState(false);
@@ -56,13 +60,14 @@ function CreateWS(){
 
 
 
-    const [features , setFeatures] = useState([
-        "Authentication",
-        "Dashboard",
-        "Notifications",
-        "Analytics",
-        "Chatbot"
-    ]);
+    // const [features , setFeatures] = useState([
+    //     "Authentication",
+    //     "Dashboard",
+    //     "Notifications",
+    //     "Analytics",
+    //     "Chatbot"
+    // ]);
+
 
     const addFeature = () =>{
         if (newFeature.trim() === "") return;
@@ -137,6 +142,41 @@ function CreateWS(){
 
     
     const navigate = useNavigate();
+
+    const nextStage1 = async() =>{
+        if (!workspaceName.trim()){
+            alert("Please enter a workspace name.");
+            return;
+        }
+
+        if (!projectIdea.trim()){
+            alert("Please enter a project idea.");
+            return;
+        }
+
+        setLoading(true);
+
+        try {   
+            const response = await fetch("/api/features-api", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"},
+                body: JSON.stringify({ projectName: workspaceName, idea: projectIdea })
+            });
+
+            const data = await response.json();
+            
+            const featuresArray = data.features.map(feature => feature.name);
+            setFeatures(featuresArray);
+            setStage(stage + 1);
+
+        } catch(err){
+            console.error(err);
+            alert("Failed to extract features. Please try again.");
+        }
+
+            setLoading(false);
+    };
 
 
     return(
@@ -219,10 +259,10 @@ function CreateWS(){
                     <div className="ws-card">
                     <h3><span style={{color: "white"}}>Create New</span> Workspace</h3>
                     <h2>Workspace Name</h2>
-                    <input type="text" placeholder="Enter your workspace name" />
+                    <input value={workspaceName} onChange={(e) => setWorkspaceName(e.target.value)} type="text" placeholder="Enter your workspace name" />
                     <h2>Project Idea</h2>
-                    <textarea placeholder="Describe your project idea or the problem you're trying to solve and how you plan on solving it"  /> 
-                    <button onClick={nextStage}>Continue</button>
+                    <textarea value={projectIdea} onChange={(e) => setProjectIdea(e.target.value)} placeholder="Describe your project idea or the problem you're trying to solve and how you plan on solving it"  /> 
+                    <button onClick={nextStage1}>Continue</button>
                     </div>
                     </>
                 )}
