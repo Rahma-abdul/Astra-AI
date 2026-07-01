@@ -8,12 +8,34 @@ function CreateWS(){
     const [stage ,setStage] = useState(1);
     const [loading , setLoading] = useState(false);
 
+    // Stagw 1 Variables
     const [workspaceName , setWorkspaceName] = useState("");
     const [projectIdea , setProjectIdea] = useState("");
     
+    // Stage 2 Variables
     const [features , setFeatures] = useState([]);
     const [newFeature , setNewFeature] = useState("");
     const [showModal , setShowModal] =useState(false);
+    const [selectedFeatures , setSelectedFeatures] = useState([]);
+
+    // Stage 3 Variables
+    const [goal , setGoal] = useState("");
+    const [timeline , setTimeline] = useState("");
+    const [budget , setBudget] = useState("");
+    const [focusAreas , setFocusAreas] = useState([]);
+    const focusOptions = [
+            "Frontend Development",
+            "Backend Development",
+            "Database Design and Management",
+            "AI and Machine Learning",
+            "Computer Vision",
+            "Docker",
+            "Kubernetes",
+            "CI/CD",
+            "Testing",
+            "Data Analysis",
+            "Robotics"
+        ];
 
     const [showModify , setShowModify] =useState(false);
     const [complexity , setComplexity] = useState("Medium");
@@ -68,6 +90,33 @@ function CreateWS(){
     //     "Chatbot"
     // ]);
 
+    const [wsData , setWSData] = useState({
+        // Stage 1
+        workspaceName: "",
+        projectIdea: "",
+        // Stage 2
+        features: [],
+        // Stage 3
+        scope: {
+            goal: "",
+            timeline: "",
+            budget: "",
+            focusAreas: []
+        },
+        // Stage 4
+        feasibility: {
+            complexity: "",
+            duration: "",
+            possibleRisks: []
+        },
+        // Stage 5
+        architecture: {
+            // To be modified later
+            selectedArchitecture: "",
+            selectedStack: {}
+        }
+    });
+
 
     const addFeature = () =>{
         if (newFeature.trim() === "") return;
@@ -105,7 +154,7 @@ function CreateWS(){
         if (stage === 5) {
             setTimeout(() => {
             setLoading(false);
-             navigate(`/WS`);
+            navigate(`/WS`);
         }, 2500);
         }
         
@@ -115,9 +164,6 @@ function CreateWS(){
         }, 2500);
     };
 
-    const nextStage_noLoad = () =>{
-            setStage(stage +1);
-    };
 
     const getProgress = () => {
     if (loading && stage === 1) return 8;
@@ -183,6 +229,52 @@ function CreateWS(){
 
             setLoading(false);
     };
+
+
+    const nextStage2 = () =>{
+        if (selectedFeatures.length === 0) {
+        alert("Please select at least one feature.");
+        return;
+        }
+
+        const updatedWsData = {
+            ...wsData,
+            workspaceName: workspaceName,
+            projectIdea: projectIdea,
+            features: selectedFeatures
+        };
+        setWSData(updatedWsData);
+        // console.log("Workspace Data after Stage 2:", updatedWsData);
+        setStage(stage + 1);
+
+    };
+
+    const nextStage3 = () =>{
+        if (!goal.trim() || !timeline.trim() || !budget.trim() || focusAreas.length === 0) {
+            alert("Please fill in all fields and select at least one focus area."); 
+            return;
+        }
+
+        const updatedWsData = {
+            ...wsData,
+            scope: {
+                goal: goal,
+                timeline: timeline,
+                budget: budget,
+                focusAreas: focusAreas
+            }
+        };
+        setWSData(updatedWsData);
+        console.log("Workspace Data after Stage 3:", updatedWsData);
+        
+        // setLoading(true);
+        // Call feasibility API here
+
+        setStage(stage + 1);
+
+    };
+
+
 
 
     return(
@@ -284,14 +376,22 @@ function CreateWS(){
                    
                     {features.map(feature => (
                         <h2 key={feature}>
-                            <input type="checkbox" defaultChecked />
+                            <input type="checkbox" 
+                            checked={selectedFeatures.includes(feature)} 
+                            onChange={() => 
+                                setSelectedFeatures(prev => 
+                                    prev.includes(feature) 
+                                        ? prev.filter(f => f !== feature) 
+                                        : [...prev, feature]
+                                )
+                            } />
                             {feature}
                         </h2>
                     ))}
 
                     </div>
                     <button onClick={() => setShowModal(true)}>+ Add Feature</button>
-                    <button onClick={nextStage_noLoad}>Confirm</button>
+                    <button onClick={nextStage2}>Confirm</button>
                     </div>
                     </>
                 )}
@@ -304,41 +404,48 @@ function CreateWS(){
                     <h3><span style={{color: "white"}}>Tell Us</span> More</h3>
                     <label style={{fontSize: "1.5rem"}}>Goal</label>
                     <div className="timeline-container">
-                    <h2><input type="radio" name="goal" />Learning/Academic</h2>
-                    <h2><input type="radio" name="goal"/>Production/Startup</h2>
+                    <h2><input type="radio" name="goal" onChange={() => setGoal("Learning/Academic")} />Learning/Academic</h2>
+                    <h2><input type="radio" name="goal" onChange={() => setGoal("Production/Startup")} />Production/Startup</h2>
                     </div>
 
                     <label style={{fontSize: "1.5rem"}}>Timeline</label>
                     <div className="timeline-container">
-                    <h2><input type="radio" name="time"/>1-3 weeks</h2>
-                    <h2><input type="radio" name="time"/>1-3 months</h2>
-                    <h2><input type="radio" name="time"/>Other: <input type="text" /></h2>
+                    <h2><input type="radio" name="time" onChange={() => setTimeline("1-3 weeks")} />1-3 weeks</h2>
+                    <h2><input type="radio" name="time" onChange={() => setTimeline("1-3 months")} />1-3 months</h2>
+                    <h2><input type="radio" name="time" value={timeline} onChange={() => setTimeline(timeline)} />Other: <input type="text" /></h2>
                     </div>
 
                     <label style={{fontSize: "1.5rem"}}>Budget</label>
                     <div className="timeline-container">
-                    <h2><input type="radio" name="budget"/>Free Tier</h2>
-                    <h2><input type="radio" name="budget"/>Limited</h2>
-                    <h2><input type="radio" name="budget"/>Unlimited</h2>
+                    <h2><input type="radio" name="budget" onChange={() => setBudget("Free Tier")} />Free Tier</h2>
+                    <h2><input type="radio" name="budget" onChange={() => setBudget("Limited")} />Limited</h2>
+                    <h2><input type="radio" name="budget" onChange={() => setBudget("Unlimited")} />Unlimited</h2>
                     </div>
 
                     <label style={{fontSize: "1.5rem"}}>Focus Areas</label>
                     <div className="timeline-container">
-                    <h2><input type="checkbox"/>Frontend Development</h2>
-                    <h2><input type="checkbox"/>Backend Development</h2>
-                    <h2><input type="checkbox"/>Database Design and Management</h2>
-                    <h2><input type="checkbox"/>AI and Machine Learning</h2>
-                    <h2><input type="checkbox"/>Computer Vision</h2>
-                    <h2><input type="checkbox"/>Docker</h2>
-                    <h2><input type="checkbox"/>Kubernetes</h2>
-                    <h2><input type="checkbox"/>CI/CD</h2>
-                    <h2><input type="checkbox"/>Testing</h2>
-                    <h2><input type="checkbox"/>Data Analysis</h2>
-                    <h2><input type="checkbox"/>Robotics</h2>
-            
+                    {focusOptions.map(area => (
+                            <h2 key={area}>
+                                <input
+                                    type="checkbox"
+                                    checked={focusAreas.includes(area)}
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setFocusAreas(prev => [...prev, area]);
+                                        } else {
+                                            setFocusAreas(prev =>
+                                                prev.filter(item => item !== area)
+                                            );
+                                        }
+                                    }}
+                                />
+                                {area}
+                            </h2>
+                    ))}
+                    
                     </div>
                     
-                    <button onClick={nextStage}>Continue</button>
+                    <button onClick={nextStage3}>Continue</button>
                     </div>
                     </>
                 )}
