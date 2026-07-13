@@ -38,8 +38,9 @@ function CreateWS(){
         ];
 
     const [showModify , setShowModify] =useState(false);
-    const [complexity , setComplexity] = useState("Medium");
+    const [complexity , setComplexity] = useState("Intermediate");
     const [duration , setDuration] = useState("73");
+    const [risks , setRisks] = useState([]);
 
     // In case user cancels 
     const [draftComplexity , setDraftComplexity] = useState(complexity);
@@ -48,34 +49,38 @@ function CreateWS(){
 
     const [showOthers , setShowOthers] =useState(false);
 
-    const architectureOptions = {
-        recommended: "Serverless" ,
-        alternatives: ["Monolithic Backend", "Microservices"]
+    // const architectureOptions = {
+    //     recommended: "Serverless" ,
+    //     alternatives: ["Monolithic Backend", "Microservices"]
 
-    }
-    const otherOptions ={
-        
-    frontend: {
-        recommended: "React",
-        alternatives: ["Vue", "Angular"]
-    },
-    backend: {
-        recommended: "Express",
-        alternatives: ["FastAPI", "Django"]
-    },
-    database: {
-        recommended: "PostgreSQL",
-        alternatives: ["MongoDB", "MySQL"]
-    }
-    };
-
-    const [selectedArchitecture, setSelectedArchitecture] = useState(architectureOptions.recommended);
-    // selected stack mesh darory dol bas --> fix it later
-    const [selectedStack, setSelectedStack] = useState({
-        frontend: otherOptions.frontend.recommended,
-        backend: otherOptions.backend.recommended,
-        database: otherOptions.database.recommended
+    // }
+    const [architectureOptions , setArchitectureOptions] = useState({
+        recommended: "" ,
+        alternatives: []
     });
+
+    const [stackOptions , setStackOptions] = useState([]);
+    const [archReason, setArchReason] = useState("");
+
+    // const stackOptions ={
+        
+    // frontend: {
+    //     recommended: "React",
+    //     alternatives: ["Vue", "Angular"]
+    // },
+    // backend: {
+    //     recommended: "Express",
+    //     alternatives: ["FastAPI", "Django"]
+    // },
+    // database: {
+    //     recommended: "PostgreSQL",
+    //     alternatives: ["MongoDB", "MySQL"]
+    // }
+    // };
+
+    const [selectedArchitecture, setSelectedArchitecture] = useState("");
+    // selected stack mesh darory dol bas --> fix it later
+    const [selectedStack, setSelectedStack] = useState([]);
 
     const [draftArch , setDraftArch] = useState(selectedArchitecture);
     const [draftStack , setDraftStack] = useState(selectedStack);
@@ -143,7 +148,7 @@ function CreateWS(){
 
     const isAllRecommended =
     selectedArchitecture === architectureOptions.recommended &&
-    Object.entries(otherOptions).every(
+    Object.entries(stackOptions).every(
         ([stack, options]) => selectedStack[stack] === options.recommended
     );
     
@@ -249,7 +254,7 @@ function CreateWS(){
 
     };
 
-    const nextStage3 = () =>{
+    const nextStage3 = async () =>{
         if (!goal.trim() || !timeline.trim() || !budget.trim() || focusAreas.length === 0) {
             alert("Please fill in all fields and select at least one focus area."); 
             return;
@@ -267,12 +272,104 @@ function CreateWS(){
         setWSData(updatedWsData);
         console.log("Workspace Data after Stage 3:", updatedWsData);
         
-        // setLoading(true);
+        setLoading(true);
         // Call feasibility API here
+
+        try {   
+            const response = await fetch("/api/feasibility-api", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"},
+                body: JSON.stringify({ workspaceName, projectIdea, features: selectedFeatures, scope: updatedWsData.scope })
+            });
+
+            const data = await response.json();
+            
+            if (!response.ok) {
+                console.error("Error during feasibility analysis:", data.error);
+                alert(data.error || "Failed to analyze feasibility.");
+                setLoading(false);
+                return;
+            }
+            
+            setComplexity(data.complexity);
+            setDuration(data.duration); 
+            setRisks(data.possibleRisks);
+
+        // Wait and and set wsData in the beginning of the nextStage4 function
+        // So if the user modifies the complexity and duration, it will be reflected in the workspace data
+        
+
+        } catch(err){
+            console.error(err);
+            alert("Failed to analyze feasibility. Please try again.");
+        }
+
+        setLoading(false);
 
         setStage(stage + 1);
 
     };
+
+    const nextStage4 = async () =>{
+
+        const updatedWsData = {
+        ...wsData,
+            feasibility: {
+                complexity: complexity,
+                duration: duration,
+                possibleRisks: risks
+            }
+        };
+        setWSData(updatedWsData);
+        console.log("Workspace Data after Stage 4:", updatedWsData);
+
+        setLoading(true);
+
+        // call architecture API here
+        try {   
+            const response = await fetch("/api/architecture-api", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"},
+                body: JSON.stringify({ workspaceName, projectIdea, features: selectedFeatures, scope: updatedWsData.scope , feasibility: updatedWsData.feasibility})
+            });
+
+            const data = await response.json();
+            
+            if (!response.ok) {
+                console.error("Error during generating architecture:", data.error);
+                alert(data.error || "Failed to generate architecture.");
+                setLoading(false);
+                return;
+            }
+            
+            setArchitectureOptions({
+                recommended: data.recommendedArchitecture,
+                alternatives: data.alternativeArchitectures
+            });
+
+            setStackOptions(data.stack);
+
+            setSelectedArchitecture(data.recommendedArchitecture);
+            setSelectedStack(
+                data.stack.map(item => ({
+                category: item.category,
+                selected: item.recommended
+            }))
+            );
+
+            setArchReason(data.why);
+            
+
+        } catch(err){
+            console.error(err);
+            alert("Failed to generate architecture. Please try again.");
+        }
+
+        setStage(stage + 1);
+        setLoading(false);
+    }
 
 
 
@@ -462,13 +559,16 @@ function CreateWS(){
                         <h2><span style={{color: "#958fe5" , fontWeight: "800"}}>Implementation Estimated Duration:</span> <span style={{fontFamily: "`Inter`, sans-serif" , letterSpacing: "-0.05em" , fontWeight: "400"}}>{duration} hours</span></h2>
                         <h2 style={{color: "#958fe5" , fontWeight: "800"}}>Possible Risks:</h2>
                         <div className="regular-list">
-                            <p>Time might be too tight</p>
+                            {/* <p>Time might be too tight</p>
                             <p>Needs extensive understanding of Machine Learning</p>
-                            <p>Might need to change the budget plan</p>
+                            <p>Might need to change the budget plan</p> */}
+                            {risks.map((risk, index) => (
+                                <p key={index}>{risk}</p>
+                            ))}
                         </div>
                     </div>
                     <button onClick={()=>{ setDraftComplexity(complexity); setDraftDuration(duration); setShowModify(true);}}>Modify</button>
-                    <button onClick={nextStage}>Confirm</button>
+                    <button onClick={nextStage4}>Confirm</button>
                     </div>
                     </>
                 )}
@@ -491,9 +591,26 @@ function CreateWS(){
                             <p><span style={{color: "#958fe5" , fontSize: "1.4rem"}}>Backend: </span> Express.js</p>
                             <p><span style={{color: "#958fe5" , fontSize: "1.4rem"}}>Database: </span> Supabase</p>
                             <p><span style={{color: "#958fe5" , fontSize: "1.4rem"}}>Deployment: </span> Vercel</p> */}
-                            {Object.entries(selectedStack).map(([stack , options]) => (
+                            {/* {Object.entries(selectedStack).map(([stack , options]) => (
                             <p key={stack}><span style={{color: "#958fe5" , fontSize: "1.4rem"}}>{stack.charAt(0).toUpperCase() + stack.slice(1)}:</span> {options}</p>
-                            ))}
+                            ))} */}
+                            {
+                                selectedStack.map(stack => (
+                                    <p key={stack.category}>
+                                        <span
+                                            style={{
+                                                color:"#958fe5",
+                                                fontSize:"1.4rem"
+                                            }}
+                                        >
+                                            {stack.category.charAt(0).toUpperCase() + stack.category.slice(1)}:
+                                        </span>
+                                        {" "}
+                                        {stack.selected}
+                                    </p>
+                            ))
+                            }
+
                         </div>
                     {isAllRecommended && (
                     <>
@@ -582,11 +699,21 @@ function CreateWS(){
                             <input
                                 type="radio"
                                 name="complexity"
-                                value="Medium"
-                                checked={draftComplexity === "Medium"}
+                                value="Intermediate"
+                                checked={draftComplexity === "Intermediate"}
                                 onChange={(e) => setDraftComplexity(e.target.value)}
                             />
-                            Medium
+                            Intermediate
+                        </h2>
+                        <h2 style={{fontSize: "1.1rem"}}>
+                            <input
+                                type="radio"
+                                name="complexity"
+                                value="Advanced"
+                                checked={draftComplexity === "Advanced"}
+                                onChange={(e) => setDraftComplexity(e.target.value)}
+                            />
+                            Advanced
                         </h2>
                         <h2 style={{fontSize: "1.1rem"}}>
                             <input
@@ -668,7 +795,7 @@ function CreateWS(){
                         <h2>Alternative Stack</h2>
                         <div className="timeline-container">
                         
-                        {Object.entries(otherOptions).map(([stack , options]) => (
+                        {/* {Object.entries(stackOptions).map(([stack , options]) => (
                             <>
                             <h2 style={{fontSize: "1.1rem"}} key={stack}>{stack.charAt(0).toUpperCase() + stack.slice(1)}:</h2>
                             {[options.recommended, ...options.alternatives].map(choice => (
@@ -687,12 +814,51 @@ function CreateWS(){
                             ))}
                             
                         </>
-                        ))} 
+                        ))}  */}
                         
-                        
-                        </div>
+                        {
+                            stackOptions.map(category => (
+                            <div key={category.category}>
+
+                                <h2 style={{fontSize: "1.1rem"}}>
+                                    {category.category.charAt(0).toUpperCase() + category.category.slice(1)}:
+                                </h2>
+
+                                {[category.recommended, ...category.alternatives].map(choice => (
+
+                                    <h2 key={choice} style={{fontSize: "1rem", paddingLeft: "1.5rem"}}>
+
+                                        <input
+                                            type="radio"
+                                            name={category.category}
+                                            value={choice}
+                                            checked={
+                                                draftStack.find(
+                                                    s => s.category === category.category
+                                                )?.selected === choice
+                                            }
+                                            onChange={() =>
+                                                setDraftStack(prev =>
+                                                    prev.map(item =>
+                                                        item.category === category.category
+                                                            ? { ...item, selected: choice }
+                                                            : item
+                                                    )
+                                                )
+                                            }
+                                        />
+
+                                        {choice}
+
+                                    </h2>
+
+                                ))}
+
+                            </div>
+                        ))
+                        }
                     
-                    
+                    </div>
                     
                     <div className="modal-buttons">
 
@@ -708,7 +874,7 @@ function CreateWS(){
                             type="button"
                             onClick={modifyArch_Stack}
                         >
-                            Save
+                            Review
                         </button>
 
                     </div>
@@ -723,3 +889,7 @@ function CreateWS(){
 }
 
 export default CreateWS;
+
+
+// TO DO: Fix Other option in timeline
+// TO DO: Review Arch 
