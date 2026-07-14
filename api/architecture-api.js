@@ -20,10 +20,13 @@ export default async function handler(req ,res){
 
     try{
 
-        const { workspaceName, projectIdea, features, scope , feasibility} = req.body;
+        const { workspaceName, projectIdea, features, scope , feasibility , mode , orgArch , orgStack , selectedArch , selectedStack} = req.body;
 
+        let prompt = "";
+
+        if (mode === "generate") {
         // Role, Context, Task, Output Format, Constraints Prompt
-        const prompt = `
+        prompt = `
             You're an experienced senior software developer, Analyze the following project:
             Project Name: ${workspaceName}
             Project Idea: ${projectIdea}
@@ -47,7 +50,15 @@ export default async function handler(req ,res){
 
             4) Suggest 3-5 alternative architectures that could also be suitable for this project.
 
-            5) For every stack category you include, recommend exactly one technology and provide 3–5 alternatives.
+            5) For every stack category you include, recommend exactly one technology and provide 3–5 alternatives that are fully compatible with:
+                - the recommended architecture 
+                - the recommended technologies in other categories
+                - the project's requirements, complexity, and scope
+                - the alternative architectures you suggested (if applicable)
+            
+            6) Assume the user may replace any single category with one of its alternatives while leaving the rest unchanged. Every suggested alternative must be fully compatible with the recommended architecture and the other recommended technologies in their respective categories. 
+            Every suggest alternative must still produce a valid and practical overall stack
+            If an alternative is not compatible, do not include it.
 
             Requirements: 
             - Return ONLY valid JSON
@@ -82,14 +93,97 @@ export default async function handler(req ,res){
         }
 
         `;
+        }
+
+        else if (mode === "review") {
+            prompt = `
+            You're an experienced senior software developer, Analyzing the following project:
+            Project Name: ${workspaceName}
+            Project Idea: ${projectIdea}
+            Selected Features: ${features}
+            Project Goal: ${scope.goal}
+            Project Timeline: ${scope.timeline}
+            Project Budget: ${scope.budget}
+            Focus Areas: ${scope.focusAreas.join(", ")}
+            Complexity: ${feasibility.complexity}
+            Duration in hours: ${feasibility.duration}
+            Possible Risks: ${feasibility.possibleRisks.join(", ")}
+
+            The user modified the AI-generated recommendation.
+
+            Review the FINAL selected architecture and stack.
+
+            Determine whether the selected technologies work well together.
+
+            Consider:
+
+            compatibility
+            scalability
+            deployment
+            ecosystem support
+            developer experience
+            project requirements
+
+            Original Architecture Recommended: ${orgArch}
+            Original Stack Recommended: ${JSON.stringify(orgStack)}
+
+            The user modified them to:
+            Selected Architecture: ${selectedArch}
+            Selected Stack: ${JSON.stringify(selectedStack)}
+
+
+            If everything is valid return JSON in the following format: 
+            {
+                "valid": true,
+            }
+
+            If improvements are needed, return JSON in the following format:
+            {
+                "valid": false,
+                "suggestions": [
+                    {
+                        "category": "Ex: Frontend",
+                        "current": "Ex: React",
+                        "suggested": "Ex: Vue.js",
+                        "reason": "Ex: Vue.js has better compatibility with the selected backend framework."
+
+                    }
+                ]       
+            }
+
+            VERY IMPORTANT:
+            - Only suggest changes that are actually necessary for compatibility or improvement.
+            - Do not suggest changes for personal preference or subjective reasons.
+            - Do not suggest changes that are not relevant to the project requirements, complexity, and scope.
+            - If 90% of the stack is compatible and only one or two categories have minor issues, do not suggest changing the entire stack. Focus on the specific categories that need improvement.
+            - If the selected architecture is not compatible with the selected stack, suggest a more compatible architecture that still meets the project requirements, complexity, and scope.
+            - Keep every "reason" field to 2 sentences, maximum 40 words.
+            - "current" and "suggested" fields must be plain strings, never objects.
+            - "category" must match one of the category names in the selected stack exactly.
+
+            Return ONLY JSON
+
+
+            `;
+
+        }
+
+        else {
+            return res.status(400).json({
+                error: "Invalid mode."
+            });
+        }
 
 
         const response = await ai.models.generateContent({
             model:"gemini-2.5-flash" ,
-            contents: prompt
+            contents: prompt ,
+            config:{ responseMimeType: "application/json"}
         });
 
 
+        console.log("RAW RESPONSE:");
+        console.log(response.text);
 
         const text = response.text.replace(/```json/g,"").replace(/```/g,"").trim();
 

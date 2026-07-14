@@ -417,7 +417,13 @@
     font-size: 1.1rem;
     color: #cdd2ef;
     background: linear-gradient(to right,#09506f 0%, #381479 50%, #6f1255 100%);
+    margin-top: 15px;
    
+}
+
+.modal-buttons button:hover{
+    transform: scale(1.05);
+
 }
 .cancel-btn{
 
@@ -443,4 +449,18 @@
 .big-profile-icon{
     height: 60px;
     justify-self: center;
+}
+
+.suggestion-item{
+
+}
+
+.suggestion-reason{
+
+}
+
+.review-arch:disabled{
+    /* opacity:0.9; */
+    background:#50566e !important;
+    cursor:not-allowed;
 }

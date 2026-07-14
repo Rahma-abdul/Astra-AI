@@ -85,7 +85,12 @@ function CreateWS(){
     const [draftArch , setDraftArch] = useState(selectedArchitecture);
     const [draftStack , setDraftStack] = useState(selectedStack);
 
+    const [suggestions , setSuggestions] = useState([]);
+    const [reviewNeeded, setReviewNeeded] = useState(false);
 
+    const [reviewLoading , setReviewLoading] = useState(false);
+
+    // review to manage if arch/stack is invalid
 
     // const [features , setFeatures] = useState([
     //     "Authentication",
@@ -139,18 +144,97 @@ function CreateWS(){
         setShowModify(false);
     }
 
-    const modifyArch_Stack = () => {
-        setSelectedArchitecture(draftArch);
-        setSelectedStack(draftStack);
-        setShowOthers(false);
+    const modifyArch_Stack = async() => {
+
+        // Review when 2+ stack is changed and/or arch changed
+        const architectureChanged = (draftArch !== selectedArchitecture);
+
+        const changedStackCount = draftStack.filter((item, index) =>
+            item.selected !== selectedStack[index].selected
+        ).length;
+
+        const needsReview = (architectureChanged || changedStackCount > 1);
+
+        if(needsReview){
+            setReviewLoading(true);
+            try{
+                const response = await fetch("/api/architecture-api", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        mode: "review",
+                        workspaceName: workspaceName,
+                        projectIdea: projectIdea,
+                        features: selectedFeatures,
+                        scope: wsData.scope,
+                        feasibility: wsData.feasibility,
+                        orgArch: selectedArchitecture,
+                        orgStack: selectedStack,
+                        selectedArch: draftArch,
+                        selectedStack: draftStack
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error("Error reviewing architecture and stack:", data.error);   
+                    alert("Failed to review. Please try again");
+                    setReviewLoading(False);
+                    return;
+                }
+
+                if (data.valid) {
+                    // alert(data.message);
+                    alert("Your selected architecture and stack are compatible. Changes saved.");
+                    setSelectedArchitecture(draftArch);
+                    setSelectedStack(draftStack);
+                    setShowOthers(false);
+                    setSuggestions([]);
+                } else {
+                    alert("The selected architecture and stack have compatibility issues. Consider the suggested improvements");
+
+                    // Show the suggested changes to user at bottom of modal 
+                    setSuggestions(data.suggestions || []);
+                                      
+                }                    
+            }
+            catch(err){
+                console.error("Error reviewing architecture and stack:", err);
+            }
+            setReviewLoading(false);
+        }
+        else{
+            setSelectedArchitecture(draftArch);
+            setSelectedStack(draftStack);
+            setShowOthers(false);
+            return;
+        }
+
+        
 
     }
 
     const isAllRecommended =
-    selectedArchitecture === architectureOptions.recommended &&
-    Object.entries(stackOptions).every(
-        ([stack, options]) => selectedStack[stack] === options.recommended
+        Boolean(architectureOptions.recommended) &&
+        selectedArchitecture === architectureOptions.recommended &&
+        stackOptions.every((stackOption) => {
+            const selectedOption = selectedStack.find(
+                (item) => item.category === stackOption.category
+            );
+            return selectedOption?.selected === stackOption.recommended;
+        });
+
+    const isDraftAllRecommended =
+        Boolean(architectureOptions.recommended) &&
+        draftArch === architectureOptions.recommended &&
+        stackOptions.every(category =>
+            draftStack.find(s => s.category === category.category)?.selected ===
+            category.recommended
     );
+
     
 
     const nextStage = () =>{
@@ -161,12 +245,9 @@ function CreateWS(){
             setLoading(false);
             navigate(`/WS`);
         }, 2500);
-        }
+        };
+        return;
         
-        setTimeout(() => {
-            setLoading(false);
-            setStage(stage +1);
-        }, 2500);
     };
 
 
@@ -332,7 +413,7 @@ function CreateWS(){
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"},
-                body: JSON.stringify({ workspaceName, projectIdea, features: selectedFeatures, scope: updatedWsData.scope , feasibility: updatedWsData.feasibility})
+                body: JSON.stringify({ workspaceName, projectIdea, features: selectedFeatures, scope: updatedWsData.scope , feasibility: updatedWsData.feasibility , mode: "generate"})
             });
 
             const data = await response.json();
@@ -509,7 +590,7 @@ function CreateWS(){
                     <div className="timeline-container">
                     <h2><input type="radio" name="time" onChange={() => setTimeline("1-3 weeks")} />1-3 weeks</h2>
                     <h2><input type="radio" name="time" onChange={() => setTimeline("1-3 months")} />1-3 months</h2>
-                    <h2><input type="radio" name="time" value={timeline} onChange={() => setTimeline(timeline)} />Other: <input type="text" /></h2>
+                    <h2><input type="radio" name="time" value={timeline} onChange={() => setTimeline(timeline)} />Other: <input type="text" onChange={(e) => setTimeline(e.target.value)}/></h2>
                     </div>
 
                     <label style={{fontSize: "1.5rem"}}>Budget</label>
@@ -617,15 +698,16 @@ function CreateWS(){
                     <h2>Why?</h2>
                     <div className="regular-list">
                             <p><span style={{color: "#958fe5" , fontSize: "1.1rem"}}>
-                                React simplifies building dynamic user interfaces through a modular, predictable, and highly efficient development paradigm. 
+                                {/* React simplifies building dynamic user interfaces through a modular, predictable, and highly efficient development paradigm. 
                                 Express provides a thin layer of fundamental web application features without obscuring Node.js features. 
                                 Supabase pairs a real PostgreSQL database with an automated, built-in suite of backend features.
-                                Vercel offers zero-configuration Git integration, instant preview URLs for every pull request, and automatic global edge rendering.
+                                Vercel offers zero-configuration Git integration, instant preview URLs for every pull request, and automatic global edge rendering. */}
+                                {archReason}
                             </span></p>
                         </div>
                     </>
                     )}
-                    <button onClick={()=>{ setDraftArch(selectedArchitecture); setDraftStack(selectedStack); setShowOthers(true)}}>Other Stack Options</button>
+                    <button onClick={()=>{ setDraftArch(selectedArchitecture); setDraftStack(selectedStack); setReviewNeeded(false); setSuggestions([]); setShowOthers(true)}}>Other Stack Options</button>
                     <button onClick={nextStage}>Continue</button>
                     </div>
                     </>
@@ -785,7 +867,7 @@ function CreateWS(){
                                 type="radio"
                                 value={arch}
                                 checked={draftArch === arch}
-                                onChange={(e) => setDraftArch(e.target.value)}
+                                onChange={(e) => {setDraftArch(e.target.value); setReviewNeeded(true);}}
                             />
                             {arch}
                         </h2>
@@ -838,13 +920,15 @@ function CreateWS(){
                                                 )?.selected === choice
                                             }
                                             onChange={() =>
-                                                setDraftStack(prev =>
+                                                {setDraftStack(prev =>
                                                     prev.map(item =>
                                                         item.category === category.category
                                                             ? { ...item, selected: choice }
                                                             : item
                                                     )
-                                                )
+                                                ); 
+                                                setReviewNeeded(true);
+                                            }
                                             }
                                         />
 
@@ -858,6 +942,30 @@ function CreateWS(){
                         ))
                         }
                     
+                    </div>
+
+                    <div>
+                        
+                        {suggestions.length > 0 && (
+                            <>
+                                <h2>Suggested Changes:</h2>
+                                <div className="regular-list">
+                                    {suggestions.map((s, idx) => (
+                                        <p key={idx} style={{fontSize: "1rem" ,color: "#ffffff"}}>
+                                            <strong style={{color: "#aaa6e7"}}>{typeof s.category === "object" ? JSON.stringify(s.category) : s.category}:</strong> 
+                                            {" "}
+                                            {typeof s.current === "object" ? JSON.stringify(s.current) : s.current}
+                                            {" → "}
+                                            {typeof s.suggested === "object" ? JSON.stringify(s.suggested) : s.suggested}
+                    
+                                            {s.reason && (
+                                                <div><strong>Reason:</strong> {s.reason}</div>
+                                            )}
+                                        </p>
+                                    ))}
+                                </div>
+                            </>
+                        )}
                     </div>
                     
                     <div className="modal-buttons">
@@ -873,8 +981,14 @@ function CreateWS(){
                         <button
                             type="button"
                             onClick={modifyArch_Stack}
+                            disabled={isDraftAllRecommended || !reviewNeeded || reviewLoading}
+                            className="review-arch"
                         >
-                            Review
+                            {
+                               reviewLoading
+                                ? <img src="/icon20.png" className="loading-icon" style={{width: "20px", height: "20px"}} />
+                                : "Review" 
+                            }
                         </button>
 
                     </div>
@@ -892,4 +1006,5 @@ export default CreateWS;
 
 
 // TO DO: Fix Other option in timeline
-// TO DO: Review Arch 
+// TO DO: Disable review if the arch is the recommended
+// To DO: Display arch reasons 
