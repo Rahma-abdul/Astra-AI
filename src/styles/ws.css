@@ -81,6 +81,7 @@
     letter-spacing: -0.05em;
     padding-left: 20px ;
     text-align: center;
+    text-transform: capitalize;
 }
 
 
@@ -221,7 +222,6 @@
     margin: -10px;
 
 }
-
 
 
 
@@ -382,4 +382,27 @@
     text-align: center;
     gap: 0.4rem;
     padding-right: 30px;
+}
+
+
+.loading-body{
+    justify-self: center;
+
+}
+
+.loading-icon2{
+    height: 40px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    animation: rotate-icon 2s linear infinite;
+    transform-origin: center;
+}
+
+@keyframes rotate-icon {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

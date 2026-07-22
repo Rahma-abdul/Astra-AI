@@ -235,20 +235,6 @@ function CreateWS(){
             category.recommended
     );
 
-    
-
-    const nextStage = () =>{
-        setLoading(true);
-
-        if (stage === 5) {
-            setTimeout(() => {
-            setLoading(false);
-            navigate(`/WS`);
-        }, 2500);
-        };
-        return;
-        
-    };
 
 
     const getProgress = () => {
@@ -452,6 +438,32 @@ function CreateWS(){
         setLoading(false);
     }
 
+
+     
+
+    const nextStage = () =>{
+        setLoading(true);
+
+        const updatedWsData = {
+        ...wsData,
+            architecture: {
+            selectedArchitecture: selectedArchitecture,
+            selectedStack: selectedStack
+        }
+        };
+        setWSData(updatedWsData);
+        console.log("Workspace Data after Last Stage:", updatedWsData);
+
+        if (stage === 5) {
+            setTimeout(() => {
+            setLoading(false);
+            // navigate(`/WS`);
+            navigate("/WS", {state: {wsData: updatedWsData}});
+        }, 2500);
+        };
+        return;
+        
+    };
 
 
 
@@ -959,7 +971,7 @@ function CreateWS(){
                                             {typeof s.suggested === "object" ? JSON.stringify(s.suggested) : s.suggested}
                     
                                             {s.reason && (
-                                                <div><strong>Reason:</strong> {s.reason}</div>
+                                                <><strong>Reason:</strong> {s.reason}</>
                                             )}
                                         </p>
                                     ))}
@@ -1005,6 +1017,8 @@ function CreateWS(){
 export default CreateWS;
 
 
-// TO DO: Fix Other option in timeline
-// TO DO: Disable review if the arch is the recommended
-// To DO: Display arch reasons 
+// TO DO: If after arch/stack invalid the user changed it to the suggested, not need to check
+// TO DO: Why is response way too long 
+// TO DO: When Arch only is changed, review fails
+// "index-CmDqitt_.js:11 Error reviewing architecture and stack: ReferenceError: False is not defined
+//     at Ee (index-CmDqitt_.js:11:187973)"
