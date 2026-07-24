@@ -186,8 +186,11 @@
 }
 
 .diagram{
-    justify-self: center;
-    justify-items: center;
+    
+    display: flex;
+    flex-direction: column;
+    /* justify-items: center; */
+    align-items: center;
     
 }
 
@@ -210,6 +213,8 @@
 .layer-icon{
     height: 20px;
     display: block;
+    justify-self: center;
+   
 }
 
 .learning-list{
@@ -394,6 +399,7 @@
     height: 40px;
     margin-left: 10px;
     margin-bottom: 20px;
+    margin-top: 20px;
     animation: rotate-icon 2s linear infinite;
     transform-origin: center;
 }

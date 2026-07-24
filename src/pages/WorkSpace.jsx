@@ -10,7 +10,7 @@ function Workspace(){
     const location = useLocation();
 
     const wsData = location.state?.wsData;
-    console.log(wsData);
+    // console.log(wsData);
 
     // Unpack the Wsdata 
     const {
@@ -41,8 +41,13 @@ function Workspace(){
         selectedStack
     } = architecture;
 
+    // Controls loading and content of proj description, learning resources, and checklist
     const [loadingWorkspace, setLoadingWorkspace] = useState(true);
     const [content , setContent] = useState(null);
+
+    // Controls loading and content of archmap
+    const [loadingArchitecture, setLoadingArchitecture] = useState(true);
+    const [architectureMap, setArchitectureMap] = useState(null);
 
     useEffect(() => {
         const generateWS = async()=> {
@@ -74,7 +79,41 @@ function Workspace(){
                 console.error(err);
             }
         };
+
+        const generateArch = async () => {
+
+            try{
+                const response = await fetch("/api/archmap-api", {
+                    method: "POST",
+                    headers:{
+                        "Content-Type": "application/json"   
+                    },
+                    body: JSON.stringify(wsData)
+                });
+                const data = await response.json();
+
+                if(!response.ok){
+                    console.error(data.error);
+                    console.log("Something happened!2")
+                    return;
+                }
+
+                console.log(data);
+
+                setArchitectureMap(data);
+                setLoadingArchitecture(false);
+
+            }
+            catch(err){
+                console.error(err);
+            }
+
+            
+        };
+
+
         generateWS();
+        generateArch();
     }, []);
 
 
@@ -149,8 +188,8 @@ function Workspace(){
 
                     <h1 className="section-name">Architecture Diagram</h1>
                     <div className="ws-layout">
-                        <div className="diagram">
-                        <div className="layer">
+                        {/* <div className="diagram"> */}
+                        {/* <div className="layer">
                             <p className="layer-element">Client (React)</p>
                         </div>
                         <img src="/icon22.png" className="layer-icon" />
@@ -166,8 +205,36 @@ function Workspace(){
                         <img src="/icon22.png" className="layer-icon" />
                         <div className="layer">
                             <p className="layer-element">PostgreSQL (Supabase)</p>
-                        </div>
-                        </div>
+                        </div> */}                        
+                        {/* </div> */}
+                        {loadingArchitecture ? (
+                            <div className="loading-body">
+                                <img src="/icon20.png" className="loading-icon2" />
+                            </div>
+                        ) : (
+                            <div className="diagram">
+
+                                {architectureMap?.layers?.map((layer, index) => (
+                                    <div key={index}>
+
+                                        <div className="layer">
+                                            {layer.nodes.map((node, nodeIndex) => (
+                                                <p key={nodeIndex} className="layer-element">
+                                                    {node.label}
+                                                </p>
+                                            ))}
+                                        </div>
+
+                                        {index < architectureMap.layers.length - 1 && (
+                                            <img src="/icon22.png" className="layer-icon" />
+                                        )}
+
+                                    </div>
+                                ))}
+
+                            </div>
+                        )}
+
                         
                     </div>
                     <h1 className="section-name">Roadmap</h1>
@@ -205,7 +272,7 @@ function Workspace(){
                         <div className="learning-list">
                             {content?.learningResources?.documentation.map((doc, index) => (
                                 <p key={index}>
-                                    {doc.title}: {doc.source}
+                                    {doc.title} - {doc.source}
                                 </p>
                             ))}
                         </div>
