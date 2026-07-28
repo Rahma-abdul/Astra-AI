@@ -1,7 +1,8 @@
 import "../styles/ws.css";
 import { useState , useEffect} from "react";
 import { useLocation } from "react-router-dom";
-import DashboardFlow from "../components/dashboardFlow";
+// import DashboardFlow from "../components/dashboardFlow";
+import RoadmapFlow from "../components/RoadmapFlow";
 
 
 
@@ -48,6 +49,39 @@ function Workspace(){
     // Controls loading and content of archmap
     const [loadingArchitecture, setLoadingArchitecture] = useState(true);
     const [architectureMap, setArchitectureMap] = useState(null);
+
+    // Controls loading and content of roadmap
+    const [loadingRoadmap, setLoadingRoadmap] = useState(true);
+    const [roadmap, setRoadmap] = useState(null);
+
+    // Controls progress bar
+    const [doneTasks , setDoneTasks] = useState([]);
+
+    const learningTasks = content?.checklist?.learningTopics ?? [];
+    const implementationTasks = content?.checklist?.implementationTasks ?? [];
+
+    const allTasks = [...learningTasks, ...implementationTasks];
+
+    const totalTasks = allTasks.length;
+    const numTasksDone = doneTasks.length;
+
+    const progress =
+        totalTasks === 0
+            ? 0
+            : Math.round((numTasksDone / totalTasks) * 100);
+
+    const unlocked = totalTasks > 0 && numTasksDone === totalTasks;
+
+    const toggleTask = (task) => {
+    setDoneTasks(prev => {
+        if (prev.includes(task)) {
+            return prev.filter(doneTask => doneTask !== task);
+        }
+
+        return [...prev, task];
+    });
+};
+
 
     useEffect(() => {
         const generateWS = async()=> {
@@ -111,9 +145,40 @@ function Workspace(){
             
         };
 
+        const generateRoadmap = async () => {
+            try{
+               
+                const response = await fetch("/api/roadmap-api", {
+                    method: "POST",
+                    headers:{
+                        "Content-Type": "application/json"   
+                    },
+                    body: JSON.stringify(wsData)
+                });
+
+                const data = await response.json();
+
+                if(!response.ok){
+                    console.error(data.error);
+                    console.log("Something happened!3")
+                    return;
+                }
+
+                console.log(data);
+
+                setRoadmap(data);
+                setLoadingRoadmap(false);
+
+            }
+            catch(err){
+                console.error(err);
+            }
+        };
+
 
         generateWS();
         generateArch();
+        generateRoadmap();
     }, []);
 
 
@@ -130,8 +195,11 @@ function Workspace(){
                 <div className="ws-area">
                     <h1 className="project-name">{workspaceName}</h1>
                     {/* Style Workspace Name neatly */}
-                    <div className="ws-progress-meter">
-                        <span style={{ width: "50%" }}></span>
+                    <div className="ws-progress">
+                        <p className="tasks-done">{numTasksDone} / {totalTasks} tasks completed</p>
+                        <div className="ws-progress-meter">
+                            <span className={unlocked ? "progress-complete" : ""} style={{ width: `${progress}%` }}></span>
+                        </div>
                     </div>
 
                     <h1 className="section-name">Workspace Overview</h1>
@@ -239,8 +307,22 @@ function Workspace(){
                     </div>
                     <h1 className="section-name">Roadmap</h1>
                     <div className="ws-layout">
-                    <DashboardFlow/>
+                        {loadingRoadmap ? (
+
+                        <div className="loading-body">
+                            <img
+                                src="/icon20.png"
+                                className="loading-icon2"
+                            />
+                        </div>
+
+                    ) : (
+
+                        <RoadmapFlow roadmap={roadmap} />
+
+                    )}
                     </div>
+
                     <h1 className="section-name">Learning Resources</h1>
                     <div className="ws-layout">
                     <h2>Video Tutorials</h2>
@@ -295,6 +377,7 @@ function Workspace(){
                     )}
                     </div>
                     </div>
+
                     <h1 className="section-name">Checklist</h1>
                     <div className="ws-layout">
                     <h2>Learning Topics</h2>
@@ -310,7 +393,11 @@ function Workspace(){
                         <div className="checklist-container">
                             {content.checklist?.learningTopics?.map((topic, index) => (
                                 <h2 key={index}>
-                                    <input type="checkbox" />
+                                    <input type="checkbox" 
+                                    checked={doneTasks.includes(topic)}
+                                    onChange={() => toggleTask(topic)}
+                                    />
+                                    
                                     {topic}
                                 </h2>
                             ))}
@@ -334,7 +421,10 @@ function Workspace(){
                         <div className="checklist-container">
                             {content?.checklist?.implementationTasks.map((topic, index) => (
                                 <h2 key={index}>
-                                    <input type="checkbox" />
+                                    <input type="checkbox"
+                                    checked={doneTasks.includes(topic)}
+                                    onChange={() => toggleTask(topic)}
+                                    />
                                     {topic}
                                 </h2>
                             ))}
@@ -351,7 +441,9 @@ function Workspace(){
                             <button>Interview Prep</button>
                             <button>Q&A</button>
                         </div>
-                        <div className="locked"></div>
+                        {!unlocked && (<div className="locked"></div>)}
+                        {/* <div className="locked"></div> */}
+                       
                         
                     </div>
                     

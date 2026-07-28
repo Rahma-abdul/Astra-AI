@@ -319,8 +319,8 @@ function LandingFlow() {
         nodesDraggable={false}
         preventScrolling ={false}
       >
-        <Background />
-        <Controls />
+        {/* <Background /> */}
+        {/* <Controls /> */}
       </ReactFlow>
     </div>
   );

@@ -375,7 +375,7 @@ const edges = [
   },
 ];
 
-function LandingFlow() {
+function DashboardFlow() {
   return (
     <div
       style={{
@@ -397,11 +397,11 @@ function LandingFlow() {
         nodesDraggable={false}
         preventScrolling ={false}
       >
-        <Background />
-        <Controls />
+        {/* <Background /> */}
+        {/* <Controls /> */}
       </ReactFlow>
     </div>
   );
 }
 
-export default LandingFlow;
+export default DashboardFlow;
