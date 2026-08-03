@@ -50,6 +50,7 @@
     padding-left: 40px ;
     font-family:  "Satoshi", sans-serif;
     letter-spacing: -0.05em;
+    justify-content:space-between;
 
    
 }
@@ -62,15 +63,66 @@
     color: transparent;
     -webkit-text-fill-color: transparent;
     align-self: last baseline;
+    
 
 }
+
+.ws-profile{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+
+}
+
+.ws-nav-buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 0.6rem;
+    margin-top: 4px;
+    margin-right: 80px;
+
+
+}
+
 
 .ws-profile-icon{
     position: relative;
     height: 30px;
     vertical-align:baseline;
     margin-top: 13px;
+}
 
+.nav-home-icon{
+    position: relative;
+    height: 48px;
+    vertical-align:baseline;
+    transition: transform 0.2s ease-in-out;
+}
+
+.nav-save-icon{
+    position: relative;
+    height: 45px;
+    vertical-align:baseline;
+    margin-left: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.nav-delete-icon{
+    position: relative;
+    height: 36px;
+    margin-top: 4px;
+    vertical-align:baseline;
+    margin-left: 40px;
+    transition: transform 0.2s ease-in-out;
+    
+}
+
+.nav-save-icon:hover,
+.nav-home-icon:hover,
+.nav-delete-icon:hover{
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
 }
 
 .ws-area{

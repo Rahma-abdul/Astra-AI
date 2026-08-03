@@ -183,8 +183,8 @@
 
 .add-ws{
     position: absolute;
-    right: 10px;
-    bottom: -30px;
+    right: 15px;
+    bottom: -28px;
     height: 40px;
     border: none;
     background-color: transparent;
@@ -211,9 +211,9 @@
     /* background-color: #d0d7e6; */
     background: linear-gradient(to bottom  , #2906699c, #05617392);
     border-radius: 12px;
-    margin-left: 8px;   
-    margin-right: 8px;
-    margin-top: 10px;
+    margin-left: 15px;   
+    margin-right: 20px;
+    margin-top: 5px;
     margin-bottom: 10px;
     padding-bottom: 8px;
     padding-left: 10px;
@@ -222,9 +222,10 @@
 .ws-title{
     font-size: 1.3rem;
     margin-top: 10px;
-    padding-top: 10px;
+    /* padding-top: 8px; */
     padding-left: 5px;
     color: #dce2fc;
+    text-transform: capitalize;
 
 }
 
@@ -234,6 +235,7 @@
     margin-top: -5px;
     font-family:  "Inter", sans-serif;
     letter-spacing: -0.05em;
+    text-transform: capitalize;
 
 }
 

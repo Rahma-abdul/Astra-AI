@@ -13,9 +13,9 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/signup" element={<SignUp/>}/>
         <Route path="/login" element={<Login/>}/>
-        <Route path="/dashboard/:name" element ={<Dashboard/>}/>
+        <Route path="/dashboard" element ={<Dashboard/>}/>
         <Route path="/createWS" element={<CreateWS/>}/>
-        <Route path="/WS" element={<Workspace/>}/>
+        <Route path="/WS/:id?" element={<Workspace />} />
       </Routes>
     </BrowserRouter>
   );

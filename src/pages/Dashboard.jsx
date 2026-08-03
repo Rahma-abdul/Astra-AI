@@ -1,13 +1,15 @@
 import "../styles/dashboard.css";
-import { useState } from "react";
-import { useParams , useNavigate} from "react-router-dom";
+import { useState , useEffect } from "react";
+import { supabase } from "../services/supabase";
+import { useNavigate} from "react-router-dom";
 
 import DashboardFlow from "../components/dashboardFlow";
 import ActiveWS from "../components/activeWS";
 
 function Dashboard(){
-    const { name } = useParams();
+
     const [activeWorkspaces, setActiveWorkspaces] = useState([]);
+    const [username , setUsername] = useState("");
 
     // const addWorkspace = () => {
 
@@ -22,6 +24,45 @@ function Dashboard(){
         navigate(`/createWS`);
     }
 
+
+    const loadDashboard = async () => {
+    
+    // Get logged in user
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+        navigate("/login");
+        return;
+    }
+
+        
+
+    const [profileResult, workspaceResult] = await Promise.all([
+        supabase
+            .from("users")
+            .select("username")
+            .eq("id", user.id)
+            .single(),
+
+        supabase
+            .from("workspaces")
+            .select("*")
+            .eq("user_id", user.id)
+            .order("updated_at",{ascending:false})
+    ]);
+
+
+    setUsername(profileResult.data.username);
+    setActiveWorkspaces(workspaceResult.data);
+};
+
+
+    useEffect(() => {
+        loadDashboard();
+    }, []);
+
     return(
 
         <div className="dashboard-page">
@@ -33,7 +74,7 @@ function Dashboard(){
                         <h1> Astra AI</h1>
                     </div>
                     <div className="right-nav">
-                    <h1>hello {decodeURIComponent(name)}!! </h1>
+                    <h1>hello {username}!! </h1>
                     {/* <img src="/icon2.png" className="profile-icon" /> */}
                     <div className="settings">
                         <img src="/icon14.png" className="settings-icon" />
@@ -58,8 +99,8 @@ function Dashboard(){
                                     <p className="reg-text2">Click the + to create a workspace</p>
                                 </div>
                             ) : (
-                                activeWorkspaces.map((title) => (
-                                    <ActiveWS key={title} title={title} />
+                                activeWorkspaces.map((workspace) => (
+                                    <ActiveWS key={workspace.id} workspace={workspace} />
                                 ))
                             )}
                             <button type="button" className="add-ws" onClick={handleNewWS} disabled={activeWorkspaces.length>=2}>

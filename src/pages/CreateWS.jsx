@@ -440,7 +440,6 @@ function CreateWS(){
 
 
      
-
     const nextStage = () =>{
         setLoading(true);
 
@@ -460,9 +459,7 @@ function CreateWS(){
             // navigate(`/WS`);
             navigate("/WS", {state: {wsData: updatedWsData}});
         }, 2500);
-        };
-        return;
-        
+        }
     };
 
 

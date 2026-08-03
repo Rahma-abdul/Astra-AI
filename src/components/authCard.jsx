@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate} from "react-router-dom";
+import { supabase } from "../services/supabase";
 
 function AuthCard({ type }) {
   const isLogin = type === "Login" ;
@@ -9,21 +10,50 @@ function AuthCard({ type }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const [showVerify , setShowVerify] =useState(false);
+
+
   const navigate = useNavigate();
 
-  const handleAuth = (event) => {
+  const handleAuth = async (event) => {
     event.preventDefault();
+
     if (!email.trim() || !password.trim()) {
       setError("Fill all fields please");
       return;
     }
 
     setError("");
-    // TODO: Add auth submission logic here
 
-    const name = email.split("@")[0];
-    console.log(`${title} submitted`, { email, password , name});
-    navigate(`/dashboard/${encodeURIComponent(name)}`);
+    try{
+      let error; 
+      if (isLogin) {
+        const result = await supabase.auth.signInWithPassword({ email, password });
+        error = result.error;
+        if (error) {
+        setError(error.message);
+        return;
+      }
+
+      navigate(`/dashboard`);
+      }
+      else {
+        const result = await supabase.auth.signUp({ email, password });
+        error = result.error;
+        if (error) {
+        setError(error.message);
+        return;
+        }
+        setShowVerify(true);
+      }
+
+      
+
+    }
+    catch(err){
+      setError("An error occurred during authentication. Please try again.");
+    }
+
   };
 
   
@@ -62,7 +92,7 @@ function AuthCard({ type }) {
           placeholder="Enter your password"
         />
 
-        <button type="submit" onClick={handleAuth}>{title}</button>
+        <button type="submit">{title}</button>
       </form>
 
       {error && <p className="form-error">{error}</p>}
@@ -74,6 +104,19 @@ function AuthCard({ type }) {
           <button onClick = {handleLogin} className="auth-link"> Already have an account? Login</button>
         )}
       </div>
+
+      {/* Verfication email */}
+      {showVerify && (
+            <div className="verify-overlay">
+                <div className="verify-card">
+
+                        <h2>Account created successfully!</h2>
+                        <p>We've sent a verification email to <span style={{textDecoration: "underline", fontStyle: "italic" , color: "#fff" }}>{email}</span>.</p>
+                        <p>Please check your inbox (and spam folder if needed), verify your email, then return here to <span className="auth-link2" onClick={handleLogin}>Login</span></p>
+                </div>
+
+            </div>
+            )}
     </div>
   );
 }

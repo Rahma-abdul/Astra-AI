@@ -1,27 +1,42 @@
 import "../styles/ws.css";
 import { useState , useEffect} from "react";
-import { useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 // import DashboardFlow from "../components/dashboardFlow";
 import RoadmapFlow from "../components/roadmapFlow";
+import { supabase } from "../services/supabase";
 
 
 
 function Workspace(){
 
+    const { id } = useParams();
+
     const location = useLocation();
+    const navigate = useNavigate();
 
     const wsData = location.state?.wsData;
     // console.log(wsData);
 
+    const isNewWorkspace = !id && wsData;
+    const isExistingWorkspace = !!id;
+
     // Unpack the Wsdata 
+    // const {
+    //     workspaceName,
+    //     projectIdea,
+    //     features,
+    //     scope,
+    //     feasibility,
+    //     architecture
+    // } = wsData;
     const {
         workspaceName,
         projectIdea,
-        features,
-        scope,
-        feasibility,
-        architecture
-    } = wsData;
+        features = [],
+        scope = {},
+        feasibility = {},
+        architecture = {}
+    } = wsData ?? {};
 
     // Nested Unpack
         const {
@@ -41,6 +56,10 @@ function Workspace(){
         selectedArchitecture,
         selectedStack
     } = architecture;
+
+    const [stack , setStack] = useState(selectedStack);
+    const [architecture_category , setArchitectureCategory] = useState(selectedArchitecture);
+    const [featuresState , setFeaturesState] = useState(features);
 
     // Controls loading and content of proj description, learning resources, and checklist
     const [loadingWorkspace, setLoadingWorkspace] = useState(true);
@@ -82,104 +101,221 @@ function Workspace(){
     });
 };
 
+    const generateWS = async()=> {
+        try{
+            const response = await fetch("/api/createWS-api",
+                {
+                    method: "POST" ,
+                    headers:{
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(wsData)
+                }
+            );
+
+            const data = await response.json();
+            
+            if(!response.ok){
+                console.error(data.error);
+                console.log("Something happened!")
+                return;
+            }
+
+            return data;
+
+        }
+        catch(err){
+            console.error(err);
+        }
+    };
+
+    const generateArch = async () => {
+        try{
+            const response = await fetch("/api/archmap-api", {
+                method: "POST",
+                headers:{
+                    "Content-Type": "application/json"   
+                },
+                body: JSON.stringify(wsData)
+            });
+            const data = await response.json();
+
+            if(!response.ok){
+                console.error(data.error);
+                console.log("Something happened!2")
+                return;
+            }
+
+            console.log(data);
+
+            return data;
+        }
+        catch(err){
+            console.error(err);
+        }
+
+        
+    };
+
+    const generateRoadmap = async () => {
+        try{
+            
+            const response = await fetch("/api/roadmap-api", {
+                method: "POST",
+                headers:{
+                    "Content-Type": "application/json"   
+                },
+                body: JSON.stringify(wsData)
+            });
+
+            const data = await response.json();
+
+            if(!response.ok){
+                console.error(data.error);
+                console.log("Something happened!3")
+                return;
+            }
+
+            console.log(data);
+
+            return data;
+        }
+        catch(err){
+            console.error(err);
+        }
+    };
+
+
+    const generateNewWorkspace = async () => {
+        try{
+            const [contentData ,archData ,roadmapData] = await Promise.all([
+                generateWS(),
+                generateArch(),
+                generateRoadmap()
+            ]);
+
+            setContent(contentData);
+            setArchitectureMap(archData);
+            setRoadmap(roadmapData);
+
+            setLoadingWorkspace(false);
+            setLoadingArchitecture(false);
+            setLoadingRoadmap(false);
+
+            await saveWorkspaceToDB({
+                ws_name: workspaceName , 
+                content: contentData ,
+                features: featuresState ,
+                arch_stack: { selectedArchitecture: architecture_category, selectedStack: stack },
+                archmap: archData ,
+                roadmap: roadmapData ,
+                status: {
+                    percentage: progress ,
+                    doneTasks: doneTasks
+                },
+                updated_at: new Date().toISOString()
+                });
+        }
+        catch(err){
+            console.error("Error saving workspace to DB:", err);
+        }
+    }
+
+    const saveWorkspaceToDB = async (workspaceFinalData) => {
+        try{
+            // Get the current session/token
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            
+            if (sessionError || !session?.access_token) {
+                throw new Error("Not authenticated");
+            }
+
+            const response = await fetch("/api/saveWorkspace-api", {
+                method: "POST",
+                headers:{ "Content-Type": "application/json" ,
+                    "Authorization": `Bearer ${session.access_token}`
+                },
+                body: JSON.stringify(workspaceFinalData)
+            });
+
+            // Log the response for debugging
+            // const responseText = await response.text();
+            // console.log("API Response:", responseText);
+
+            // let data;
+            // try {
+            //     data = JSON.parse(responseText);
+            // } catch {
+            //     console.error("Failed to parse response:", responseText);
+            //     throw new Error("API returned invalid response");
+            // }
+
+            const data = await response.json();
+
+            if(!response.ok){
+                console.error(data.error);
+                console.log("Something happened!4")
+                return;
+            }
+
+            const wsID = data.wsID;
+            console.log("Workspace saved to DB!!");
+            // navigate(`/WS/${wsID}` , {replace: true});
+        }   
+        catch(err){
+            console.error("Error saving workspace to DB:", err);
+        }
+    };
+
+
+    const loadExistingWorkspace = async () => {
+        try{
+            const response = await fetch(`/api/loadWorkspace-api/${id}`, {
+                method: "GET",
+                headers:{ "Content-Type": "application/json" }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error(errorData.error);
+                return;
+            }
+
+            const workspaceData = await response.json();
+            // Unpack
+            setContent(workspaceData.content);
+            setArchitectureMap(workspaceData.archmap);
+            setRoadmap(workspaceData.roadmap);
+            setDoneTasks(workspaceData.status.doneTasks);
+
+            // Rest --> Features , Architecture , Stack 
+            setFeaturesState(workspaceData.features);
+            setArchitectureCategory(workspaceData.arch_stack.selectedArchitecture);
+            setStack(workspaceData.arch_stack.selectedStack);
+
+
+            setLoadingWorkspace(false);
+            
+        }
+        catch(err){
+            console.error("Error loading existing workspace:", err);
+        }
+    };
 
     useEffect(() => {
-        const generateWS = async()=> {
-            try{
-                const response = await fetch("/api/createWS-api",
-                    {
-                        method: "POST" ,
-                        headers:{
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(wsData)
-                    }
-                );
-
-                const data = await response.json();
-                
-                if(!response.ok){
-                    console.error(data.error);
-                    console.log("Something happened!")
-                    return;
-                }
-
-                setContent(data);
-                setLoadingWorkspace(false);
-
-
-            }
-            catch(err){
-                console.error(err);
-            }
-        };
-
-        const generateArch = async () => {
-
-            try{
-                const response = await fetch("/api/archmap-api", {
-                    method: "POST",
-                    headers:{
-                        "Content-Type": "application/json"   
-                    },
-                    body: JSON.stringify(wsData)
-                });
-                const data = await response.json();
-
-                if(!response.ok){
-                    console.error(data.error);
-                    console.log("Something happened!2")
-                    return;
-                }
-
-                console.log(data);
-
-                setArchitectureMap(data);
-                setLoadingArchitecture(false);
-
-            }
-            catch(err){
-                console.error(err);
-            }
-
-            
-        };
-
-        const generateRoadmap = async () => {
-            try{
-               
-                const response = await fetch("/api/roadmap-api", {
-                    method: "POST",
-                    headers:{
-                        "Content-Type": "application/json"   
-                    },
-                    body: JSON.stringify(wsData)
-                });
-
-                const data = await response.json();
-
-                if(!response.ok){
-                    console.error(data.error);
-                    console.log("Something happened!3")
-                    return;
-                }
-
-                console.log(data);
-
-                setRoadmap(data);
-                setLoadingRoadmap(false);
-
-            }
-            catch(err){
-                console.error(err);
-            }
-        };
-
-
-        generateWS();
-        generateArch();
-        generateRoadmap();
-    }, []);
+        if (isNewWorkspace) {
+            // generateWS();
+            // generateArch();
+            // generateRoadmap();
+            generateNewWorkspace();
+        }else if (isExistingWorkspace) {
+            loadExistingWorkspace();
+        }
+        else{
+            console.error("No workspace data provided.");
+        }
+        
+    }, [id, wsData]);
 
 
 
@@ -187,8 +323,15 @@ function Workspace(){
         
         <div className="ws-page">
                 <nav className="ws-nav">
+                        <div className="ws-profile">
                         <img src="/icon2.png" className="ws-profile-icon" />
                         <h1> Astra AI</h1>
+                        </div>
+                        <div className="ws-nav-buttons">
+                            <img src="/icon27.png" className="nav-home-icon" />
+                            <img src="/icon24.png" className="nav-save-icon" />
+                            <img src="/icon25.png" className="nav-delete-icon" />
+                        </div>
                 </nav>
                 <div className="ws-background-image"></div>
                 
@@ -219,7 +362,7 @@ function Workspace(){
                             <p>Notifications</p>
                             <p>Parsing</p>
                             <p>Ranking</p> */}
-                            {features.map(feature => (
+                            {featuresState.map(feature => (
                                 <p key={feature}>{feature}</p>
                             ))}
                         </div>
@@ -231,19 +374,19 @@ function Workspace(){
                             <p>Backend:</p>
                             <p>Database:</p>
                             <p>Deployment:</p> */}
-                            {selectedStack.map(stack => (
+                            {stack.map(stack => (
                                 <p key={stack.category}>
                                         {stack.category}:
                                 </p>
                             ))}
                             </div>
                             <div className="stack-option">
-                                <p><span style={{color: "whitesmoke" }}>{selectedArchitecture}</span></p>
+                                <p><span style={{color: "whitesmoke" }}>{architecture_category}</span></p>
                                 {/* <p><span style={{color: "whitesmoke"}}>React</span></p>
                                 <p><span style={{color: "whitesmoke"}}>Express</span></p>
                                 <p><span style={{color: "whitesmoke" }}>PostgreSQL</span></p>
                                 <p><span style={{color: "whitesmoke"}}>Vercel</span></p> */}
-                                {selectedStack.map(stack => (
+                                {stack.map(stack => (
                                 <p key={stack.category}>
                                     <span style={{ color: "whitesmoke" }}>
                                          {stack.selected}
