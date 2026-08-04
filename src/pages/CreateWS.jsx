@@ -182,7 +182,7 @@ function CreateWS(){
                 if (!response.ok) {
                     console.error("Error reviewing architecture and stack:", data.error);   
                     alert("Failed to review. Please try again");
-                    setReviewLoading(False);
+                    setReviewLoading(false);
                     return;
                 }
 

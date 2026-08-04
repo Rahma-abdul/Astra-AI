@@ -1,0 +1,164 @@
+.docs-overlay{
+    position:fixed;
+    inset:0;
+    backdrop-filter:blur(8px);
+    background:rgba(0,0,0,.35);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:1000;
+
+}
+
+.docs-card{
+
+    width:80%;
+    max-width:950px;
+
+    max-height:85vh;
+
+    overflow-y:auto;
+
+    background:#1d2158;
+    border:2px solid #1d21588e;
+    border-radius:24px;
+
+    color:white;
+
+    box-shadow:0 0 40px #5d63b77e;
+    animation:fadeUp .25s ease;
+
+    padding:25px;
+
+
+}
+
+.docs-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    margin-top: -20px;
+
+}
+
+.docs-header h2{
+    font-family:  "Satoshi", sans-serif;
+    letter-spacing: -0.05em;
+    font-size: 1.5rem;
+    /* text-transform: uppercase; */
+}
+
+
+.docs-close{
+
+    border:none;
+    background:none;
+    color:white;
+    cursor:pointer;
+    font-family:  "Satoshi", sans-serif;
+    letter-spacing: -0.05em;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.docs-body{
+    line-height:1.8;
+
+}
+/* 
+.docs-text{
+
+    white-space:pre-wrap;
+    font-family:inherit;
+
+} */
+
+.docs-list{
+    padding-left:22px;
+}
+
+.docs-list li{
+    margin-bottom:14px;
+}
+
+.qa-container{
+
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+
+}
+
+.qa-card{
+
+    background:#113c64a2;
+    border-radius:24px;
+    padding:18px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+
+.qa-question{
+
+    /* color:#6bb6ff; */
+    background: linear-gradient(to right, #a06bff, #ff5fd1);
+    background-clip: text;
+    color: transparent;
+    margin-bottom:10px;
+
+}
+
+.qa-answer{
+    line-height:1.6;
+
+}
+
+.markdown-body{
+    line-height:1.8;
+}
+
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3{
+    /* margin-top:25px; */
+    margin-bottom:10px;
+    
+}
+
+.markdown-body h1{
+    justify-self: center;
+}
+
+.markdown-body p{
+    padding-left:35px;
+}
+
+
+.markdown-body ul{
+
+    padding-left:35px;
+
+}
+
+.markdown-body code{
+
+    background:#303030;
+    padding:2px 5px;
+    border-radius:4px;
+    
+
+}
+
+.markdown-body pre{
+
+    background:#111;
+    padding:15px;
+    overflow:auto;
+    border-radius:10px;
+
+}

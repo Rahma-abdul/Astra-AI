@@ -452,7 +452,7 @@
 }
 
 .locked::after {
-    content: "Unlocks when your project is complete\A Finish the implementation and deployment checklists to generate your README and unlock optional career materials.";
+    content: "Finish the implementation and learning checklists to generate your README and UNLOCK optional career materials.\A Make sure your progress is saved!!";
     white-space: pre-line;
     font-family: "Inter", sans-serif;
     font-size: 1rem;

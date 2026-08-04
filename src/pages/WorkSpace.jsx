@@ -3,6 +3,7 @@ import { useState , useEffect} from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 // import DashboardFlow from "../components/dashboardFlow";
 import RoadmapFlow from "../components/roadmapFlow";
+import DocsCard from "../components/docsCard";
 import { supabase } from "../services/supabase";
 
 
@@ -74,6 +75,12 @@ function Workspace(){
     const [loadingRoadmap, setLoadingRoadmap] = useState(true);
     const [roadmap, setRoadmap] = useState(null);
 
+    // Controls unlocked buttons
+    const [loadingDocs , setLoadingDocs] = useState(null);
+    const [docsOpen, setDocsOpen] = useState(false);
+    const [docsTitle, setDocsTitle] = useState("");
+    const [docsContent, setDocsContent] = useState(null);
+
     // Controls progress bar
     const [doneTasks , setDoneTasks] = useState([]);
 
@@ -81,6 +88,11 @@ function Workspace(){
     const implementationTasks = content?.checklist?.implementationTasks ?? [];
 
     const allTasks = [...learningTasks, ...implementationTasks];
+    
+    // Tracking last saved
+    const [lastSavedTasks, setLastSavedTasks] = useState(null);
+    const [lastSavedTime , setLastSavedTime] = useState(null);
+
 
     const totalTasks = allTasks.length;
     const numTasksDone = doneTasks.length;
@@ -90,11 +102,7 @@ function Workspace(){
             ? 0
             : Math.round((numTasksDone / totalTasks) * 100);
 
-    const unlocked = totalTasks > 0 && numTasksDone === totalTasks;
-
-    // Tracking last saved
-    const [lastSavedTasks, setLastSavedTasks] = useState(null);
-    const [lastSavedTime , setLastSavedTime] = useState(null);
+    const unlocked = totalTasks > 0 && lastSavedTasks.length === totalTasks;
 
     const toggleTask = (task) => {
     setDoneTasks(prev => {
@@ -449,6 +457,50 @@ function Workspace(){
         
     }
 
+    const handleUnlock = async(docType) =>{
+
+        setLoadingDocs(docType);
+
+        try{
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            
+        if (sessionError || !session?.access_token) {
+            throw new Error("Not authenticated");
+        }
+
+
+        const response = await fetch("/api/unlocked-api", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({
+                ws_id: id,
+                type: docType
+            })
+        });
+
+        const data = await response.json();
+
+        console.log(data);
+        setDocsTitle(docType);
+        setDocsContent(data.data);
+        setDocsOpen(true);
+
+        if (!response.ok) {
+            console.error(data.error);
+            return;
+        }
+       
+    }catch(err){
+            console.error("Error:", err);
+        }
+
+        setLoadingDocs(null);
+
+    }
+
 
 
     return(
@@ -711,14 +763,35 @@ function Workspace(){
                     <div className="ws-layout">
                         
                         <div className="ws-buttons">
-                            <button>Generate Readme</button>
-                            <button>Generate CV Bullets</button>
-                            <button>Interview Prep</button>
-                            <button>Q&A</button>
+                            <button onClick={() => handleUnlock("readme")}>
+                                {loadingDocs === "readme"
+                                ? <img src="/icon20.png" className="loading-icon" style={{width: "20px", height: "20px"}} />
+                                : "Generate Readme"}
+                            </button>
+                            <button onClick={() => handleUnlock("cvBullets")}>
+                                {loadingDocs === "cvBullets"
+                                ? <img src="/icon20.png" className="loading-icon" style={{width: "20px", height: "20px"}} />
+                                : "Generate CV Bullets"}
+                            </button>
+                            <button onClick={() => handleUnlock("interviewPrep")}>
+                                {loadingDocs === "interviewPrep"
+                                ? <img src="/icon20.png" className="loading-icon" style={{width: "20px", height: "20px"}} />
+                                : "Interview Prep"}
+                            </button>
+                            <button onClick={() => handleUnlock("qaGuide")}>
+                                {loadingDocs === "qaGuide"
+                                ? <img src="/icon20.png" className="loading-icon" style={{width: "20px", height: "20px"}} />
+                                : "Q&A"}
+                            </button>
                         </div>
                         {!unlocked && (<div className="locked"></div>)}
                         {/* <div className="locked"></div> */}
-                       
+                        <DocsCard
+                            isOpen={docsOpen}
+                            onClose={() => setDocsOpen(false)}
+                            title={docsTitle}
+                            data={docsContent}
+                        />
                         
                     </div>
                     
