@@ -53,10 +53,11 @@ function Workspace(){
     } = feasibility;
 
     const {
-        selectedArchitecture,
-        selectedStack
+    selectedArchitecture = "",
+    selectedStack = []
     } = architecture;
 
+    const [WSname, setWSName] = useState(wsData?.workspaceName ?? "");
     const [stack , setStack] = useState(selectedStack);
     const [architecture_category , setArchitectureCategory] = useState(selectedArchitecture);
     const [featuresState , setFeaturesState] = useState(features);
@@ -90,6 +91,10 @@ function Workspace(){
             : Math.round((numTasksDone / totalTasks) * 100);
 
     const unlocked = totalTasks > 0 && numTasksDone === totalTasks;
+
+    // Tracking last saved
+    const [lastSavedTasks, setLastSavedTasks] = useState(null);
+    const [lastSavedTime , setLastSavedTime] = useState(null);
 
     const toggleTask = (task) => {
     setDoneTasks(prev => {
@@ -260,6 +265,10 @@ function Workspace(){
 
             const wsID = data.wsID;
             console.log("Workspace saved to DB!!");
+
+            setLastSavedTasks(workspaceFinalData.status.doneTasks);
+            setLastSavedTime(workspaceFinalData.updated_at);
+
             // navigate(`/WS/${wsID}` , {replace: true});
         }   
         catch(err){
@@ -270,9 +279,18 @@ function Workspace(){
 
     const loadExistingWorkspace = async () => {
         try{
-            const response = await fetch(`/api/loadWorkspace-api/${id}`, {
+
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            
+            if (sessionError || !session?.access_token) {
+                throw new Error("Not authenticated");
+            }
+            
+            const response = await fetch(`/api/loadWorkspace-api?id=${id}`, {
                 method: "GET",
-                headers:{ "Content-Type": "application/json" }
+                headers:{ "Content-Type": "application/json" ,
+                    "Authorization": `Bearer ${session.access_token}`
+                }
             });
 
             if (!response.ok) {
@@ -293,8 +311,17 @@ function Workspace(){
             setArchitectureCategory(workspaceData.arch_stack.selectedArchitecture);
             setStack(workspaceData.arch_stack.selectedStack);
 
+            // Workspace Name
+            setWSName(workspaceData.ws_name);
+
+            // Last Saved Time
+            setLastSavedTasks(workspaceData.status.doneTasks);
+            setLastSavedTime(workspaceData.updated_at);            
 
             setLoadingWorkspace(false);
+            setLoadingArchitecture(false);
+            setLoadingRoadmap(false);
+
             
         }
         catch(err){
@@ -318,6 +345,111 @@ function Workspace(){
     }, [id, wsData]);
 
 
+    // Save Button --> Updates WS in DB 
+    // Only Update the status and updated_at fields in the DB
+    const handleSave = async () => {
+
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            
+        if (sessionError || !session?.access_token) {
+            throw new Error("Not authenticated");
+        }
+
+        const timeNow = new Date().toISOString();
+
+        const response = await fetch("/api/updateWorkspace-api", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({
+                ws_id: id,
+                status: {
+                    doneTasks,
+                    percentage: progress
+                },
+                updated_at: timeNow
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error(data.error);
+            return;
+        }
+
+        setLastSavedTasks(doneTasks);
+        setLastSavedTime(timeNow);
+
+        alert("Current Progress Saved!!");
+    }
+
+
+    // Home Button --> Navigate to Home Page
+    const handleHome = () => {
+
+        console.log("Last Saved Tasks:", lastSavedTasks);
+        console.log("Current Tasks:", doneTasks);
+        console.log("Last Saved Time:", lastSavedTime);
+
+        if (lastSavedTasks !== doneTasks) {
+            const confirmLeave = window.confirm(
+                "You have unsaved changes. \nYou're last save was at " + new Date(lastSavedTime).toLocaleString()+ ".\n Are you sure you want to leave?"
+            );
+            if (!confirmLeave) {
+                return;
+            }
+            else{
+                navigate(`/dashboard`);
+            }  
+    } 
+    navigate(`/dashboard`);
+}
+
+    // Delete Button Click Handler
+    const handleDelete = async () => {
+        const confirmLeave = window.confirm(
+                "Are you sure you want to delete this workspace?\nThis action cannot be undone!!"
+            );
+            if (!confirmLeave) {
+                return;
+            }
+            else{
+
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                    
+                if (sessionError || !session?.access_token) {
+                    throw new Error("Not authenticated");
+                }
+
+                const response = await fetch("/api/deleteWorkspace-api", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${session.access_token}`
+                    },
+                    body: JSON.stringify({
+                        ws_id: id
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error(data.error);
+                    return;
+                }
+
+                alert("Workspace Deleted!!");
+                navigate(`/dashboard`);
+            }  
+        
+        
+    }
+
+
 
     return(
         
@@ -328,15 +460,15 @@ function Workspace(){
                         <h1> Astra AI</h1>
                         </div>
                         <div className="ws-nav-buttons">
-                            <img src="/icon27.png" className="nav-home-icon" />
-                            <img src="/icon24.png" className="nav-save-icon" />
-                            <img src="/icon25.png" className="nav-delete-icon" />
+                            <img src="/icon27.png" className="nav-home-icon" onClick={handleHome} />
+                            <img src="/icon24.png" className="nav-save-icon" onClick={handleSave} />
+                            <img src="/icon25.png" className="nav-delete-icon" onClick={handleDelete} />
                         </div>
                 </nav>
                 <div className="ws-background-image"></div>
                 
                 <div className="ws-area">
-                    <h1 className="project-name">{workspaceName}</h1>
+                    <h1 className="project-name">{WSname}</h1>
                     {/* Style Workspace Name neatly */}
                     <div className="ws-progress">
                         <p className="tasks-done">{numTasksDone} / {totalTasks} tasks completed</p>

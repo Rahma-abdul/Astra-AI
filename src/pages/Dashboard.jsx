@@ -77,7 +77,7 @@ function Dashboard(){
                     <h1>hello {username}!! </h1>
                     {/* <img src="/icon2.png" className="profile-icon" /> */}
                     <div className="settings">
-                        <img src="/icon14.png" className="settings-icon" />
+                        <img src="/icon26.png" className="settings-icon" />
                         <div className="dropdown-settings">
                             <a href="#">Change Username</a>
                             <a href="#">Delete Account</a>

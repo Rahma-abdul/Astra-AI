@@ -1,24 +1,18 @@
-// import supabaseAdmin from "./supabaseAdmin";
 import supabaseAdmin from "./supabaseAdmin.js";
 
 
 export default async function handler(req, res) {
     
-    console.log("saveWorkspace API started");
+    console.log("updateWorkspace API started");
 
     try{
         const {
-            ws_name,
-            content,
-            features,
-            arch_stack,
-            archmap,
-            roadmap,
+            ws_id,
             status,
             updated_at
         } = req.body;
 
-        if (!ws_name || !content || !features || !arch_stack || !archmap || !roadmap) {
+        if (!ws_id || !status || !updated_at) {
             return res.status(400).json({ error: "Missing required fields" });
         }
 
@@ -37,37 +31,25 @@ export default async function handler(req, res) {
             return res.status(401).json({ error: "Invalid or expired token" });
         }
 
-        // Insert WS in DB
-        const { data: workspaceData, error: insertError } = await supabaseAdmin
+        // Update WS in DB --> ONLY Status and Updated_at fields
+        const { error: updateError } = await supabaseAdmin
             .from("workspaces")
-            .insert({
-                user_id: user.id,
-                ws_name: ws_name,
-                content: content,
-                features: features,
-                arch_stack: arch_stack,
-                archmap: archmap,
-                roadmap: roadmap,
+            .update({
                 status: status,
                 updated_at: updated_at
             })
-            .select();
+            .eq("id", ws_id)
+            .eq("user_id", user.id);
 
-        if (insertError) {
-            console.error(insertError);
+        if (updateError) {
+            console.error(updateError);
              return res.status(500).json({
-                    error: insertError.message
+                    error: updateError.message
                 });
             // return res.status(500).json({ error: "Failed to insert workspace" });
         };
 
-       const wsID = workspaceData?.[0]?.id;
-
-       if (!wsID) {
-            return res.status(500).json({ error: "Workspace created but no ID returned" });
-        }
-
-        res.status(200).json({wsID});
+        res.status(200).json({success: true});
 
 
     } catch (error) {
