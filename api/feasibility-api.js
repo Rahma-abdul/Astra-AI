@@ -54,7 +54,7 @@ export default async function handler(req ,res){
 
 
         const response = await ai.models.generateContent({
-            model:"gemini-3.5-flash-lite" ,
+            model:"gemini-3-flash-preview" ,
             contents: prompt,
             config: {
                 responseMimeType: "application/json",
@@ -65,16 +65,14 @@ export default async function handler(req ,res){
 
         const text = response.text.replace(/```json/g,"").replace(/```/g,"").trim();
 
-        console.log("RAW RESPONSE:");
-        console.log(text);
-
+       
         // const json = JSON.parse(text);
         let json;
         try {
             json = JSON.parse(text);
         } catch (err) {
-            console.error("Invalid JSON from Gemini:");
-            console.log(text);
+            // console.error("Invalid JSON from Gemini:");
+            // console.log(text);
 
             return res.status(500).json({
                 error: "Gemini returned invalid JSON."

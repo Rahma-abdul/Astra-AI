@@ -3,7 +3,7 @@ import supabaseAdmin from "./supabaseAdmin.js";
 
 export default async function handler(req, res) {
     
-    console.log("loadWorkspace API started");
+    // console.log("loadWorkspace API started");
 
     if (req.method !== "GET") {
         return res.status(405).json({

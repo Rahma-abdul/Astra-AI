@@ -131,7 +131,6 @@ function CreateWS(){
     const addFeature = () =>{
         if (newFeature.trim() === "") return;
         const featureNorm = newFeature.trim().toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase()); 
-        // console.log("Feature is:" , featureNorm);
         setFeatures([...features, featureNorm]);
         setNewFeature("");
         setShowModal(false);
@@ -173,7 +172,9 @@ function CreateWS(){
                         orgArch: selectedArchitecture,
                         orgStack: selectedStack,
                         selectedArch: draftArch,
-                        selectedStack: draftStack
+                        selectedStack: draftStack,
+                        alterArch: architectureOptions.alternatives ,
+                        alterStack: stackOptions
                     })
                 });
 
@@ -316,7 +317,6 @@ function CreateWS(){
             features: selectedFeatures
         };
         setWSData(updatedWsData);
-        // console.log("Workspace Data after Stage 2:", updatedWsData);
         setStage(stage + 1);
 
     };
@@ -337,7 +337,6 @@ function CreateWS(){
             }
         };
         setWSData(updatedWsData);
-        console.log("Workspace Data after Stage 3:", updatedWsData);
         
         setLoading(true);
         // Call feasibility API here
@@ -389,7 +388,6 @@ function CreateWS(){
             }
         };
         setWSData(updatedWsData);
-        console.log("Workspace Data after Stage 4:", updatedWsData);
 
         setLoading(true);
 
@@ -451,7 +449,6 @@ function CreateWS(){
         }
         };
         setWSData(updatedWsData);
-        console.log("Workspace Data after Last Stage:", updatedWsData);
 
         if (stage === 5) {
             setTimeout(() => {
@@ -968,7 +965,7 @@ function CreateWS(){
                                             {typeof s.suggested === "object" ? JSON.stringify(s.suggested) : s.suggested}
                     
                                             {s.reason && (
-                                                <><strong>Reason:</strong> {s.reason}</>
+                                                <><strong> Reason:</strong> {s.reason}</>
                                             )}
                                         </p>
                                     ))}

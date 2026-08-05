@@ -3,7 +3,7 @@ import supabaseAdmin from "./supabaseAdmin.js";
 
 export default async function handler(req, res) {
     
-    console.log("updateWorkspace API started");
+    // console.log("updateWorkspace API started");
 
     try{
         const {

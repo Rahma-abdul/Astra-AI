@@ -84,14 +84,11 @@ export default async function handler(req ,res){
        
 
         const response = await ai.models.generateContent({
-            model:"gemini-3.5-flash-lite" ,
+            model:"gemini-3-flash-preview" ,
             contents: prompt ,
             config:{ responseMimeType: "application/json"}
         });
 
-
-        console.log("RAW RESPONSE:");
-        console.log(response.text);
 
         const text = response.text.replace(/```json/g,"").replace(/```/g,"").trim();
 

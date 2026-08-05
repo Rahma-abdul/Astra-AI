@@ -124,9 +124,9 @@ function getLayoutedElements(nodes, edges){
     const start = Math.min(...layoutedNodes.map(node => node.position.y));
     const end = Math.max(...layoutedNodes.map(node => node.position.y));
     const actualHeight = (end-start) - 200;
-    console.log(start);
-    console.log(end);
-    console.log(actualHeight);
+    // console.log(start);
+    // console.log(end);
+    // console.log(actualHeight);
 
     return {
         nodes: layoutedNodes, 

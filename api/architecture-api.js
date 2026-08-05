@@ -20,7 +20,7 @@ export default async function handler(req ,res){
 
     try{
 
-        const { workspaceName, projectIdea, features, scope , feasibility , mode , orgArch , orgStack , selectedArch , selectedStack} = req.body;
+        const { workspaceName, projectIdea, features, scope , feasibility , mode , orgArch , orgStack , selectedArch , selectedStack , alterArch , alterStack} = req.body;
 
         let prompt = "";
 
@@ -96,6 +96,7 @@ export default async function handler(req ,res){
         }
 
         else if (mode === "review") {
+           
             prompt = `
             You're an experienced senior software developer, Analyzing the following project:
             Project Name: ${workspaceName}
@@ -124,12 +125,20 @@ export default async function handler(req ,res){
             developer experience
             project requirements
 
-            Original Architecture Recommended: ${orgArch}
-            Original Stack Recommended: ${JSON.stringify(orgStack)}
+            
+            The ONLY legal values you may ever suggest are listed below.
+            - Original Architecture Recommended: ${orgArch}
+            - Original Stack Recommended: ${JSON.stringify(orgStack)}
+            - Alternatives Architecture: ${alterArch}
+            - Alternatives Stack: ${JSON.stringify(alterStack)}
 
-            The user modified them to:
+            DO NOT SUGGEST A STACK OR ARCHITECTURE THAT ISN'T FROM THE LEGAL VALUES
+
+
+            The current user selection is:
             Selected Architecture: ${selectedArch}
             Selected Stack: ${JSON.stringify(selectedStack)}
+
 
 
             If everything is valid return JSON in the following format: 
@@ -155,18 +164,22 @@ export default async function handler(req ,res){
             - Only suggest changes that are actually necessary for compatibility or improvement.
             - Do not suggest changes for personal preference or subjective reasons.
             - Do not suggest changes that are not relevant to the project requirements, complexity, and scope.
+            - You are NOT allowed to invent technologies.
+            - You're only allowed to request changes within the range of choices of recommended and alternatives given only.
             - If 90% of the stack is compatible and only one or two categories have minor issues, do not suggest changing the entire stack. Focus on the specific categories that need improvement.
             - If the selected architecture is not compatible with the selected stack, suggest a more compatible architecture that still meets the project requirements, complexity, and scope.
             - Keep every "reason" field to 2 sentences, maximum 40 words.
             - "current" and "suggested" fields must be plain strings, never objects.
             - "category" must match one of the category names in the selected stack exactly.
+            - If a better technology exists but is not listed above, you MUST NOT suggest it.
+        
 
             Return ONLY JSON
 
 
             `;
-
         }
+
 
         else {
             return res.status(400).json({
@@ -176,14 +189,10 @@ export default async function handler(req ,res){
 
 
         const response = await ai.models.generateContent({
-            model:"gemini-3.5-flash-lite" ,
+            model:"gemini-3.1-flash-lite" ,
             contents: prompt ,
             config:{ responseMimeType: "application/json"}
         });
-
-
-        console.log("RAW RESPONSE:");
-        console.log(response.text);
 
         const text = response.text.replace(/```json/g,"").replace(/```/g,"").trim();
 

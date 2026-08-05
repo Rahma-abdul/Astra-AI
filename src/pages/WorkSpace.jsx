@@ -16,7 +16,6 @@ function Workspace(){
     const navigate = useNavigate();
 
     const wsData = location.state?.wsData;
-    // console.log(wsData);
 
     const isNewWorkspace = !id && wsData;
     const isExistingWorkspace = !!id;
@@ -90,7 +89,7 @@ function Workspace(){
     const allTasks = [...learningTasks, ...implementationTasks];
     
     // Tracking last saved
-    const [lastSavedTasks, setLastSavedTasks] = useState(null);
+    const [lastSavedTasks, setLastSavedTasks] = useState([]);
     const [lastSavedTime , setLastSavedTime] = useState(null);
 
 
@@ -159,7 +158,6 @@ function Workspace(){
                 return;
             }
 
-            console.log(data);
 
             return data;
         }
@@ -189,7 +187,6 @@ function Workspace(){
                 return;
             }
 
-            console.log(data);
 
             return data;
         }
@@ -251,17 +248,7 @@ function Workspace(){
                 body: JSON.stringify(workspaceFinalData)
             });
 
-            // Log the response for debugging
-            // const responseText = await response.text();
-            // console.log("API Response:", responseText);
-
-            // let data;
-            // try {
-            //     data = JSON.parse(responseText);
-            // } catch {
-            //     console.error("Failed to parse response:", responseText);
-            //     throw new Error("API returned invalid response");
-            // }
+           
 
             const data = await response.json();
 
@@ -272,12 +259,12 @@ function Workspace(){
             }
 
             const wsID = data.wsID;
-            console.log("Workspace saved to DB!!");
+            // console.log("Workspace saved to DB!!");
 
             setLastSavedTasks(workspaceFinalData.status.doneTasks);
             setLastSavedTime(workspaceFinalData.updated_at);
 
-            // navigate(`/WS/${wsID}` , {replace: true});
+            navigate(`/WS/${wsID}` , {replace: true});
         }   
         catch(err){
             console.error("Error saving workspace to DB:", err);
@@ -398,9 +385,6 @@ function Workspace(){
     // Home Button --> Navigate to Home Page
     const handleHome = () => {
 
-        console.log("Last Saved Tasks:", lastSavedTasks);
-        console.log("Current Tasks:", doneTasks);
-        console.log("Last Saved Time:", lastSavedTime);
 
         if (lastSavedTasks !== doneTasks) {
             const confirmLeave = window.confirm(
@@ -483,7 +467,6 @@ function Workspace(){
 
         const data = await response.json();
 
-        console.log(data);
         setDocsTitle(docType);
         setDocsContent(data.data);
         setDocsOpen(true);

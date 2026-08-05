@@ -5,7 +5,7 @@ import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req, res) {
     
-    console.log("unlocked API started");
+    // console.log("unlocked API started");
 
     if (req.method !== "POST") {
         return res.status(405).json({
@@ -40,7 +40,6 @@ export default async function handler(req, res) {
             return res.status(401).json({ error: "Invalid or expired token" });
         }
 
-        console.log("Auth done, loading ws!");
         // Load WS
         const { data: workspaceData, error: fetchError } = await supabaseAdmin
             .from("workspaces")
@@ -56,13 +55,12 @@ export default async function handler(req, res) {
         
         // Already generated
         if(workspaceData.docs && Object.keys(workspaceData.docs).length > 0){
-            console.log("already generated");
-            console.log(workspaceData.docs[type]);
+            // console.log("already generated");
+            // console.log(workspaceData.docs[type]);
             return res.status(200).json({ data: workspaceData.docs[type]});
         }
 
         // If not generated
-        console.log("generating");
         const prompt = `
             You are a senior software engineer. Generate FOUR things for the following project.
 
@@ -144,7 +142,7 @@ export default async function handler(req, res) {
 
        
         const response = await ai.models.generateContent({
-            model:"gemini-3.5-flash-lite" ,
+            model:"gemini-3.6-flash" ,
             contents: prompt,
             config: {
                 responseMimeType: "application/json",
@@ -156,7 +154,6 @@ export default async function handler(req, res) {
 
         const generated = JSON.parse(text);
 
-        console.log(generated)
 
         // Save to DB
         const { error: updateError } = await supabaseAdmin
