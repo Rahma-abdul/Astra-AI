@@ -37,6 +37,25 @@ export default async function handler(req, res) {
             return res.status(401).json({ error: "Invalid or expired token" });
         }
 
+        // For security purposes checking the number of active projects again
+        const { data: userData, error: userError } = await supabaseAdmin
+            .from("users")
+            .select("active_proj")
+            .eq("id", user.id)
+            .single();
+
+        if (userError || !userData) {
+            return res.status(404).json({
+                error: "User profile not found"
+            });
+        }
+
+        if (userData.active_proj >= 2) {
+            return res.status(403).json({
+                error: "You can only have 2 active workspaces."
+            });
+        }
+
         // Insert WS in DB
         const { data: workspaceData, error: insertError } = await supabaseAdmin
             .from("workspaces")
@@ -65,6 +84,22 @@ export default async function handler(req, res) {
 
        if (!wsID) {
             return res.status(500).json({ error: "Workspace created but no ID returned" });
+        }
+
+        // Inc number of ws in database
+        const { error: countError } = await supabaseAdmin
+        .from("users")
+        .update({
+            active_proj: userData.active_proj + 1
+        })
+        .eq("id", user.id);
+
+        if (countError) {
+            console.error(countError);
+            // Important: workspace was created but counter failed.
+            return res.status(500).json({
+                error: "Workspace created but failed to update workspace count."
+            });
         }
 
         res.status(200).json({wsID});

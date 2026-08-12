@@ -33,6 +33,24 @@ export default async function handler(req, res) {
             return res.status(401).json({ error: "Invalid or expired token" });
         }
 
+        // Get ws count 
+        const { data: userData, error: userError } = await supabaseAdmin
+            .from("users")
+            .select("active_proj")
+            .eq("id", user.id)
+            .single();
+
+        if (userError || !userData) {
+            console.error(userError);
+
+            return res.status(500).json({
+                error: "Failed to get workspace count"
+            });
+        }
+
+        const currentCount = userData.active_proj ?? 0;
+
+
         // Delete WS in DB 
         const { error: deleteError } = await supabaseAdmin
             .from("workspaces")
@@ -48,6 +66,22 @@ export default async function handler(req, res) {
                 });
             // return res.status(500).json({ error: "Failed to insert workspace" });
         };
+
+
+        const { error: countError } = await supabaseAdmin
+            .from("users")
+            .update({
+                active_proj: Math.max(0, currentCount - 1)
+            })
+            .eq("id", user.id);
+
+        if (countError) {
+            console.error(countError);
+            // Important: workspace was created but counter failed.
+            return res.status(500).json({
+                error: "Workspace deleted but failed to update workspace count."
+            });
+        }
 
         res.status(200).json({success: true});
 

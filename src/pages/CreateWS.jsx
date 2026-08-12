@@ -21,6 +21,7 @@ function CreateWS(){
     // Stage 3 Variables
     const [goal , setGoal] = useState("");
     const [timeline , setTimeline] = useState("");
+    const [otherTimeline, setOtherTimeline] = useState("");
     const [budget , setBudget] = useState("");
     const [focusAreas , setFocusAreas] = useState([]);
     const focusOptions = [
@@ -596,7 +597,7 @@ function CreateWS(){
                     <div className="timeline-container">
                     <h2><input type="radio" name="time" onChange={() => setTimeline("1-3 weeks")} />1-3 weeks</h2>
                     <h2><input type="radio" name="time" onChange={() => setTimeline("1-3 months")} />1-3 months</h2>
-                    <h2><input type="radio" name="time" value={timeline} onChange={() => setTimeline(timeline)} />Other: <input type="text" onChange={(e) => setTimeline(e.target.value)}/></h2>
+                    <h2><input type="radio" name="time" checked={timeline === otherTimeline && otherTimeline !== ""} onChange={() => setTimeline(otherTimeline)} />Other: <input type="text" onChange={(e) => {const value = e.target.value; setOtherTimeline(value); setTimeline(value);}} placeholder="e.g. 6 months"/></h2>
                     </div>
 
                     <label style={{fontSize: "1.5rem"}}>Budget</label>

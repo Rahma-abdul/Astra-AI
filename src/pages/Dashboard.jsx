@@ -10,6 +10,10 @@ function Dashboard(){
 
     const [activeWorkspaces, setActiveWorkspaces] = useState([]);
     const [username , setUsername] = useState("");
+    const [numActiveProj , setNumActiveProj] = useState(0);
+
+    const [showUsernameModal, setShowUsernameModal] = useState(false);
+    const [newUsername, setNewUsername] = useState("");
 
     // const addWorkspace = () => {
 
@@ -42,7 +46,7 @@ function Dashboard(){
     const [profileResult, workspaceResult] = await Promise.all([
         supabase
             .from("users")
-            .select("username")
+            .select("username , active_proj")
             .eq("id", user.id)
             .single(),
 
@@ -54,14 +58,130 @@ function Dashboard(){
     ]);
 
 
+    if (profileResult.error) {
+        console.error(profileResult.error);
+        return;
+    }
+
+    if (workspaceResult.error) {
+        console.error(workspaceResult.error);
+        return;
+    }
+
     setUsername(profileResult.data.username);
     setActiveWorkspaces(workspaceResult.data);
+    setNumActiveProj(profileResult.data.active_proj);
 };
 
 
     useEffect(() => {
         loadDashboard();
     }, []);
+
+    const handleLogout = async() => {
+        const { error } = await supabase.auth.signOut();
+
+        if (error) {
+            console.error("Logout failed:", error);
+            return;
+        }
+
+        navigate("/");
+    };
+
+    const handleChangeUsername = async () => {
+
+    const username = newUsername.trim();
+     if (!username) {
+        alert("Fill with your new username or click cancel!!");
+        return;
+    }
+
+    if (username.length > 30) {
+        alert("Username must be 30 characters or less!!");
+        return;
+    }
+
+    const { data: { user }, error: userError } =
+        await supabase.auth.getUser();
+
+    if (userError || !user) {
+        console.error(userError);
+        return;
+    }
+
+    const { error } = await supabase
+        .from("users")
+        .update({
+            username: username
+        })
+        .eq("id", user.id);
+
+    if (error) {
+        console.error("Failed to change username:", error);
+        return;
+    }
+
+    setUsername(username);
+    setShowUsernameModal(false);
+    setNewUsername("");
+};
+
+    const handleDelete = async() => {
+
+    const confirmed = window.confirm(
+        "Are you sure you want to delete your account?\n\n" +
+        "This will permanently delete your account and all of your workspaces.\n\n" +
+        "This action cannot be undone."
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+
+        const {
+            data: { session },
+            error: sessionError
+        } = await supabase.auth.getSession();
+
+        if (sessionError || !session?.access_token) {
+            throw new Error("Not authenticated");
+        }
+
+        const response = await fetch("/api/updateWorkspace-api", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({
+                action: "deleteAccount"
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error(data.error);
+            alert(data.error || "Failed to delete account.");
+            return;
+        }
+
+        // Sign out locally
+        await supabase.auth.signOut();
+
+        navigate("/");
+
+    } catch (error) {
+
+        console.error("Delete account failed:", error);
+
+        alert("Something went wrong while deleting your account.");
+    }
+    };
+
 
     return(
 
@@ -79,8 +199,9 @@ function Dashboard(){
                     <div className="settings">
                         <img src="/icon26.png" className="settings-icon" />
                         <div className="dropdown-settings">
-                            <a href="#">Change Username</a>
-                            <a href="#">Delete Account</a>
+                            <button className="dropdown-button" onClick={() => setShowUsernameModal(true)}>Change Username</button>
+                            <button className="dropdown-button" onClick={handleLogout}>Log Out</button>
+                            <button className="dropdown-button" onClick={handleDelete}>Delete Account</button>
                         </div>
                     </div>
                     </div>
@@ -103,7 +224,7 @@ function Dashboard(){
                                     <ActiveWS key={workspace.id} workspace={workspace} />
                                 ))
                             )}
-                            <button type="button" className="add-ws" onClick={handleNewWS} disabled={activeWorkspaces.length>=2}>
+                            <button type="button" className="add-ws" onClick={handleNewWS} disabled={activeWorkspaces.length>=2 && numActiveProj >= 2}>
                                 <img src="/icon15.png" className="add-icon" alt="Add workspace" />
                             </button>
                             
@@ -147,7 +268,33 @@ function Dashboard(){
                     </div>
                 </div>
             </div>
-             
+                    {showUsernameModal && (
+                <div className="modal-overlay">
+                    <div className="username-modal">
+
+                        <h2>Change Username</h2>
+
+                        <input
+                            type="text"
+                            value={newUsername}
+                            onChange={(e) => setNewUsername(e.target.value)}
+                            placeholder="New username"
+                        />
+
+                        <div className="modal-buttons">
+                            <button className= "cancel-btn" onClick={() => setShowUsernameModal(false)}>
+                                Cancel
+                            </button>
+
+                            <button onClick={handleChangeUsername}>
+                                Save
+                            </button>
+                        </div>
+
+                    </div>
+
+            </div>
+        )}  
         </div>
     )
 

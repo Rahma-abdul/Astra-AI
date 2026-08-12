@@ -262,15 +262,11 @@
 }
 
 
-
-.problem-title:hover{
-    color: #10729b;
-    transform: translateY(-2px);
-   
-}
-
 .problem:hover {
     transform: translateY(-5px);
+    .problem-title{
+        color: #4b74db;
+    }
    
 }
 
