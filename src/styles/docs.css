@@ -39,8 +39,15 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:20px;
-    margin-top: -20px;
+    position: sticky;
+    top: -30px;
+    background: #1d2158;
+
+    margin-top: -50px;
+    margin-bottom: 20px;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    z-index: 10;
 
 }
 
@@ -160,5 +167,23 @@
     padding:15px;
     overflow:auto;
     border-radius:10px;
+
+}
+
+
+@media (max-width: 700px){
+        
+    .docs-card{
+        width:70%;
+    }
+
+    .docs-header h2{
+        font-size: 1.4rem;
+    }
+
+    .docs-body{
+        line-height:1.4;
+    }
+
 
 }

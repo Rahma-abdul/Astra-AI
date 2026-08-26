@@ -178,9 +178,9 @@
 
 .add-ws{
     position: absolute;
-    right: 15px;
-    bottom: -28px;
-    height: 40px;
+    right: 5px;
+    bottom: -35px;
+    height: 35px;
     border: none;
     background-color: transparent;
     display: flex;
@@ -525,13 +525,26 @@
 
     .reg-text{
         font-size: 1.1rem;
-        font-family:  "Inter", sans-serif;
-        letter-spacing: -0.05em;
         line-height: 1.2rem;
         padding-left: 20px ;
         margin-bottom: 20px;
 
     }
+
+    .active-ws-card{
+        margin-bottom: 8px;
+        padding-bottom: 5px;
+    }
+
+    .ws-title{
+        font-size: 1.1rem;
+        margin-top: 8px;
+    }
+
+    .details{
+        font-size: 0.8rem;
+    }
+
 
 }
 
@@ -590,14 +603,10 @@
 
     .reg-text{
         font-size: 0.9rem;
-        font-family:  "Inter", sans-serif;
-        letter-spacing: -0.05em;
         line-height: 1.5rem;
         padding-left: 20px ;
         margin-bottom: 0px;
-
     }
-
 }
 
 

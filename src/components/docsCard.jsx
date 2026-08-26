@@ -1,10 +1,21 @@
 import "../styles/docs.css"
 import ReactMarkdown from "react-markdown";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 
 
 function DocsCard({ isOpen, onClose, title, data }) {
 
+
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        }
+
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isOpen]);
+    
     if (!isOpen) return null;
     let prettyTitle ;
     if (title === "readme"){

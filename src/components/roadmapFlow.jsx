@@ -2,7 +2,8 @@ import ReactFlow, {
   Background,
   useEdgesState,
   useNodesState,
-  MarkerType
+  MarkerType,
+  Controls
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -56,6 +57,7 @@ const nodeHeight = 80;
 //     );
 // }
 
+
 function getLayoutedElements(nodes, edges){
 
     const dagreGraph = new dagre.graphlib.Graph();
@@ -94,8 +96,8 @@ function getLayoutedElements(nodes, edges){
             ...node,
 
             position: {
-                x: position.x - nodeWidth/2 ,
-                y: position.y - nodeHeight/2
+                x: position.x - nodeWidth / 2 ,
+                y: position.y - nodeHeight / 2
             }, 
             
             style: {
@@ -121,17 +123,50 @@ function getLayoutedElements(nodes, edges){
         }; 
     });
 
-    const start = Math.min(...layoutedNodes.map(node => node.position.y));
-    const end = Math.max(...layoutedNodes.map(node => node.position.y));
-    const actualHeight = (end-start) - 200;
-    // console.log(start);
-    // console.log(end);
-    // console.log(actualHeight);
+    // const start = Math.min(...layoutedNodes.map(node => node.position.y));
+    // const end = Math.max(...layoutedNodes.map(node => node.position.y));
+    // const actualHeight = (end-start) - 200;
 
+    // const bottom = Math.max(
+    //     ...layoutedNodes.map(
+    //         node => node.position.y + nodeHeight
+    //     )
+    // );
+
+    // // Find the top-most point
+    // const top = Math.min(
+    //     ...layoutedNodes.map(node => node.position.y)
+    // );
+
+    // // Add some breathing room around the roadmap
+    // const actualHeight = bottom - top + 100;
+
+    const minY = Math.min(
+        ...layoutedNodes.map(node => node.position.y)
+    );
+
+    const maxY = Math.max(
+        ...layoutedNodes.map(node => node.position.y + nodeHeight)
+    );
+
+
+    const roadmapHeight = maxY - minY + 100;
+
+
+    const topPadding = 20;
+
+    const normalizedNodes = layoutedNodes.map(node => ({
+        ...node,
+        position: {
+            ...node.position,
+            y: node.position.y - minY + topPadding
+        }
+    }));
+   
     return {
-        nodes: layoutedNodes, 
+        nodes: normalizedNodes, 
         edges, 
-        height: actualHeight
+        height: roadmapHeight
     };
 }
 
@@ -139,7 +174,7 @@ function RoadmapFlow({roadmap}){
 
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-    const [flowHeight, setFlowHeight] = useState(600);
+    const [flowHeight, setFlowHeight] = useState(450);
 
     // const nodeTypes = {
     //     roadmapNode: RoadmapNode
@@ -184,7 +219,10 @@ function RoadmapFlow({roadmap}){
 
         setNodes(layouted.nodes);
         setEdges(layouted.edges);
-        setFlowHeight(Math.max(600, Math.min(layouted.height, 1200)));
+        // setFlowHeight(Math.max(600, Math.min(layouted.height, 1200)));
+        setFlowHeight(
+            Math.max(250, Math.min(layouted.height, 700))
+        );
 
     }, [roadmap, setNodes , setEdges]);
 
@@ -205,6 +243,7 @@ function RoadmapFlow({roadmap}){
         }}
         >
             <ReactFlow
+                key={nodes.length}
                 nodes={nodes}
                 edges={edges}
 
@@ -212,18 +251,20 @@ function RoadmapFlow({roadmap}){
                 onEdgesChange={onEdgesChange}
 
                 fitView
-                // fitViewOptions={{
-                //     padding: 0.15,
-                //     minZoom: 0.5,
-                //     maxZoom: 1.5
+                fitViewOptions={{
+                    padding: 0.1,
+                    duration: 0
+                }}
+                // defaultViewport={{
+                //     y: 20,
                 // }}
 
                 nodesDraggable = {false}
-                panOnDrag={false}
+                // panOnDrag={false}
                 // zoomOnScroll={false}
                 preventScrolling ={false}
             >
-                {/* <Controls /> */}
+            <Controls />
             </ReactFlow>
         </div>
     );

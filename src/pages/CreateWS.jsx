@@ -27,7 +27,7 @@ function CreateWS(){
     const focusOptions = [
             "Frontend Development",
             "Backend Development",
-            "Database Design and Management",
+            "Database Design/Management",
             "AI and Machine Learning",
             "Computer Vision",
             "Docker",
