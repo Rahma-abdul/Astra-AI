@@ -393,7 +393,7 @@ function DashboardFlow() {
         edges={edges}
         fitView
         zoomOnScroll={false}
-        panOnDrag={false}
+        // panOnDrag={false}
         nodesDraggable={false}
         preventScrolling ={false}
       >

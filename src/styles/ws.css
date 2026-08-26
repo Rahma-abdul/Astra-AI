@@ -506,6 +506,54 @@
     .checklist-container {
         grid-template-columns: 1fr;
     }
+
+        
+    .ws-nav{
+        font-size: 0.65em;
+        height: 3rem;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 3.5rem;
+    }
+
+        
+    .ws-nav h1{
+        align-self:center;
+        margin-top: 10px; 
+    }
+
+    .ws-nav-buttons{
+        gap: 0.1rem;
+        margin-top: 13px;
+    }
+
+
+    .ws-profile-icon{
+        height: 21px;
+        vertical-align:baseline;
+        margin-top: 20px;
+        margin-left: -15px;
+        
+    }
+
+    .nav-home-icon{
+        height: 40px;
+        vertical-align:baseline;
+        
+    }
+
+    .nav-save-icon{
+        height: 37px;
+        vertical-align:baseline;
+        margin-left: 3px;
+    }
+
+    .nav-delete-icon{
+        height: 28px;
+        vertical-align:baseline;
+        margin-left: 15px;
+        
+    }
 }
 
 @media (max-width: 600px) {
