@@ -233,39 +233,28 @@ function Dashboard(){
                     <div className="about-section">
                         <div className="background-image"></div>
                         <div className="about1">
-                        <div>
-                        <h1 className="title-text2">Structured guidance <span className="title-text">from idea to deployment.</span> </h1>
-                        <h1 className="reg-text">Astra AI is an AI-assisted project planning and execution platform that guides developers from an initial project idea to a complete implementation plan</h1>
-                        <h1 className="reg-text">Modern software development requires dozens of interconnected decisions before implementation even begins.</h1>
-                        {/* <h1 className="reg-text">DevPath AI helps you make the right ones before writing a single line of code.</h1> */}
+                            <div>
+                            <h1 className="title-text2">Structured guidance <span className="title-text">from idea to deployment.</span> </h1>
+                            <h1 className="reg-text">Astra AI is an AI-assisted project planning and execution platform that guides developers from an initial project idea to a complete implementation plan</h1>
+                            <h1 className="reg-text">Modern software development requires dozens of interconnected decisions before implementation even begins.</h1>
+                            </div>
+                            <div className="decision-section">
+                                <h1 className="title-text3">Developers constantly need to make decisions about: </h1>
+                                <div className="decisions-cards">
+                                    <h1 className="decision-card">Architecture</h1>
+                                    <h1 className="decision-card">Features</h1>
+                                    <h1 className="decision-card">Frameworks</h1>
+                                    <h1 className="decision-card">Deployment</h1>
+                                    <h1 className="decision-card">Databases</h1>
+                                    <h1 className="decision-card">Integration</h1>
+                                </div>
+                            </div>
                         </div>
-                        <div className="decision-section">
-                        <h1 className="title-text3">Developers constantly need to make decisions about: </h1>
-                        <div className="decisions-cards">
-                            {/* <div> */}
-                            <h1 className="decision-card">Architecture</h1>
-                            <h1 className="decision-card">Features</h1>
-                            {/* </div> */}
-                            {/* <div> */}
-                            <h1 className="decision-card">Frameworks</h1>
-                            <h1 className="decision-card">Deployment</h1>
-                            {/* </div> */}
-                            {/* <div> */}
-                            <h1 className="decision-card">Databases</h1>
-                            <h1 className="decision-card">Integration</h1>
-                            {/* </div> */}
-                        </div>
-                        </div>
-                        </div>
-                        <div className="workflow">
+                    </div>
+                </div>
+                <div className="workflow">
                         <h1 className="title-text1">Workflow</h1>
                         <DashboardFlow/>
-                        </div>
-                        
-                        
-
-
-                    </div>
                 </div>
             </div>
                     {showUsernameModal && (

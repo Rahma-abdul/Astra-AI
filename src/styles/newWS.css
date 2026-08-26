@@ -217,9 +217,10 @@
     display: flex;
     flex-direction: column;
     align-items: start;
+    gap: 1.8rem;
 }
 
-.features-container h2{
+.features-container label{
     font-weight: 600;
     font-size: 1.1rem;
     font-family:  "Inter" , sans-serif;
@@ -230,11 +231,27 @@
     padding-left: 10px;
     gap:1rem;
     cursor: pointer;
+    /* width: 100%; */
+    width: fit-content;
+    align-items: center;
+}
+
+
+.features-container h2{
+    font-weight: 500;
+    font-size: 1.2rem;
+    font-family:  "Inter" , sans-serif;
+    letter-spacing: -0.02em;
+    display: flex;
+    flex-direction: row;
+    color: white;
+    padding-left: 10px;
+    gap:1rem;
+    cursor: pointer;
     width: 100%;
     align-items: center;
-    
-   
 }
+
 
 
 .timeline-container{
@@ -244,11 +261,13 @@
     display:flex;
     flex-direction: column;
     align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 15px;
     
 
 }
 
-.timeline-container h2{
+.timeline-container label{
     font-weight: 600;
     font-size: 1.1rem;
     font-family:  "Inter" , sans-serif;
@@ -260,16 +279,36 @@
     color: white;
     gap:1rem;
     cursor: pointer;
-    width: 100%;
+    /* width: 100%; */
+    width: fit-content;
     align-items: center;
     
 }
 
+
+.timeline-container h2{
+    font-weight: 600;
+    font-size: 1.1rem;
+    font-family:  "Inter" , sans-serif;
+    letter-spacing: -0.02em;
+    display:flex;
+    flex-direction: row;
+    color: white;
+    gap:1rem;
+    cursor: pointer;
+    width: fit-content;
+    align-items: center;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    
+}
+
  
-.features-container h2 input[type="checkbox"],
-.features-container h2 input[type="radio"],
-.timeline-container h2 input[type="checkbox"],
-.timeline-container h2 input[type="radio"] {
+.features-container label input[type="checkbox"],
+.features-container label input[type="radio"],
+.timeline-container label input[type="checkbox"],
+.timeline-container label input[type="radio"] {
     appearance: none;
     -webkit-appearance: none;
     /* flex-shrink: 0; */
@@ -285,32 +324,32 @@
 } 
 
 
-.features-container h2 input[type="checkbox"],
-.timeline-container h2 input[type="checkbox"] {
+.features-container label input[type="checkbox"],
+.timeline-container label input[type="checkbox"] {
     border-radius: 6px;
 }
 
-.features-container h2 input[type="radio"],
-.timeline-container h2 input[type="radio"] {
+.features-container label input[type="radio"],
+.timeline-container label input[type="radio"] {
     border-radius: 50%;
 
 }
 
-.features-container h2 input:hover,
-.timeline-container h2 input:hover {
+.features-container label input:hover,
+.timeline-container label input:hover {
     border-color: #28dfef;
 }
 
-.features-container h2 input:checked,
-.timeline-container h2 input:checked {
+.features-container label input:checked,
+.timeline-container label input:checked {
     border-color: transparent;
     background: linear-gradient(135deg, #28dfef 0%, #a06bff 60%, #ff5fd1 100%);
     box-shadow: 0 0 14px rgba(160, 107, 255, 0.6);
 }
 
 
-.features-container h2 input:focus-visible,
-.timeline-container h2 input:focus-visible {
+.features-container label input:focus-visible,
+.timeline-container label input:focus-visible {
     outline: none;
     box-shadow: 0 0 0 3px rgba(40, 223, 239, 0.35);
 }
@@ -368,10 +407,12 @@
 }
 
 .modal-card h2{
-    margin-top:0;
+    margin-top:5px;
     font-family:  "Satoshi", sans-serif;
     letter-spacing: -0.05em;
     font-size: 1.5rem;
+    padding-top: 10px;
+    /* padding-bottom: 10px; */
 }
 
 .modal-card p{
@@ -381,9 +422,9 @@
 }
 
 .modal-card input{
-    margin-bottom:1.5rem;
+    /* margin-bottom:1.5rem; */
     width: 90%;
-    padding: 0.95rem 1rem;
+    /* padding: 0.95rem 1rem; */
     border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.1);
@@ -393,6 +434,7 @@
     letter-spacing: -0.02em;
 
 }
+
 
 .modal-buttons{
 
@@ -449,14 +491,6 @@
 .big-profile-icon{
     height: 60px;
     justify-self: center;
-}
-
-.suggestion-item{
-
-}
-
-.suggestion-reason{
-
 }
 
 .review-arch:disabled{

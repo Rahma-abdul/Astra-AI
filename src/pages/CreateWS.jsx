@@ -560,7 +560,7 @@ function CreateWS(){
                     <div className="features-container">
                    
                     {features.map(feature => (
-                        <h2 key={feature}>
+                        <label key={feature}>
                             <input type="checkbox" 
                             checked={selectedFeatures.includes(feature)} 
                             onChange={() => 
@@ -571,7 +571,7 @@ function CreateWS(){
                                 )
                             } />
                             {feature}
-                        </h2>
+                        </label>
                     ))}
 
                     </div>
@@ -589,28 +589,28 @@ function CreateWS(){
                     <h3><span style={{color: "white"}}>Tell Us</span> More</h3>
                     <label style={{fontSize: "1.5rem"}}>Goal</label>
                     <div className="timeline-container">
-                    <h2><input type="radio" name="goal" onChange={() => setGoal("Learning/Academic")} />Learning/Academic</h2>
-                    <h2><input type="radio" name="goal" onChange={() => setGoal("Production/Startup")} />Production/Startup</h2>
+                    <label><input type="radio" name="goal" onChange={() => setGoal("Learning/Academic")} />Learning/Academic</label>
+                    <label><input type="radio" name="goal" onChange={() => setGoal("Production/Startup")} />Production/Startup</label>
                     </div>
 
                     <label style={{fontSize: "1.5rem"}}>Timeline</label>
                     <div className="timeline-container">
-                    <h2><input type="radio" name="time" onChange={() => setTimeline("1-3 weeks")} />1-3 weeks</h2>
-                    <h2><input type="radio" name="time" onChange={() => setTimeline("1-3 months")} />1-3 months</h2>
-                    <h2><input type="radio" name="time" checked={timeline === otherTimeline && otherTimeline !== ""} onChange={() => setTimeline(otherTimeline)} />Other: <input type="text" onChange={(e) => {const value = e.target.value; setOtherTimeline(value); setTimeline(value);}} placeholder="e.g. 6 months"/></h2>
+                    <label><input type="radio" name="time" onChange={() => setTimeline("1-3 weeks")} />1-3 weeks</label>
+                    <label><input type="radio" name="time" onChange={() => setTimeline("1-3 months")} />1-3 months</label>
+                    <label><input type="radio" name="time" checked={timeline === otherTimeline && otherTimeline !== ""} onChange={() => setTimeline(otherTimeline)} />Other: <input type="text" onChange={(e) => {const value = e.target.value; setOtherTimeline(value); setTimeline(value);}} placeholder="e.g. 6 months"/></label>
                     </div>
 
                     <label style={{fontSize: "1.5rem"}}>Budget</label>
                     <div className="timeline-container">
-                    <h2><input type="radio" name="budget" onChange={() => setBudget("Free Tier")} />Free Tier</h2>
-                    <h2><input type="radio" name="budget" onChange={() => setBudget("Limited")} />Limited</h2>
-                    <h2><input type="radio" name="budget" onChange={() => setBudget("Unlimited")} />Unlimited</h2>
+                    <label><input type="radio" name="budget" onChange={() => setBudget("Free Tier")} />Free Tier</label>
+                    <label><input type="radio" name="budget" onChange={() => setBudget("Limited")} />Limited</label>
+                    <label><input type="radio" name="budget" onChange={() => setBudget("Unlimited")} />Unlimited</label>
                     </div>
 
                     <label style={{fontSize: "1.5rem"}}>Focus Areas</label>
                     <div className="timeline-container">
                     {focusOptions.map(area => (
-                            <h2 key={area}>
+                            <label key={area}>
                                 <input
                                     type="checkbox"
                                     checked={focusAreas.includes(area)}
@@ -625,7 +625,7 @@ function CreateWS(){
                                     }}
                                 />
                                 {area}
-                            </h2>
+                            </label>
                     ))}
                     
                     </div>
@@ -741,6 +741,7 @@ function CreateWS(){
                         placeholder="Example: Dark Mode"
                         value={newFeature}
                         onChange={(e)=>setNewFeature(e.target.value)}
+                        style={{padding: "0.95rem 1rem"}}
                     />
 
                     <div className="modal-buttons">
@@ -774,7 +775,7 @@ function CreateWS(){
 
                         <h2>Complexity</h2>
                         <div className="timeline-container">
-                        <h2 style={{fontSize: "1.1rem"}}>
+                        <label style={{fontSize: "1.1rem"}}>
                             <input
                                 type="radio"
                                 name="complexity"
@@ -783,8 +784,8 @@ function CreateWS(){
                                 onChange={(e) => setDraftComplexity(e.target.value)}
                             />
                             Beginner
-                        </h2>
-                        <h2 style={{fontSize: "1.1rem"}}>
+                        </label>
+                        <label style={{fontSize: "1.1rem"}}>
                             <input
                                 type="radio"
                                 name="complexity"
@@ -793,8 +794,8 @@ function CreateWS(){
                                 onChange={(e) => setDraftComplexity(e.target.value)}
                             />
                             Intermediate
-                        </h2>
-                        <h2 style={{fontSize: "1.1rem"}}>
+                        </label>
+                        <label style={{fontSize: "1.1rem"}}>
                             <input
                                 type="radio"
                                 name="complexity"
@@ -803,8 +804,8 @@ function CreateWS(){
                                 onChange={(e) => setDraftComplexity(e.target.value)}
                             />
                             Advanced
-                        </h2>
-                        <h2 style={{fontSize: "1.1rem"}}>
+                        </label>
+                        <label style={{fontSize: "1.1rem"}}>
                             <input
                                 type="radio"
                                 name="complexity"
@@ -813,7 +814,7 @@ function CreateWS(){
                                 onChange={(e) => setDraftComplexity(e.target.value)}
                             />
                             Expert
-                        </h2>
+                        </label>
                         </div>
                     
                     <h2>Duration</h2>
@@ -824,6 +825,7 @@ function CreateWS(){
                         placeholder="Example: 53"
                         value={draftDuration}
                         onChange={(e)=>setDraftDuration(e.target.value)}
+                        style={{padding: "0.95rem 1rem"}}
                     />
 
                     <div className="modal-buttons">
@@ -869,7 +871,7 @@ function CreateWS(){
                         </h2> */}
                        
                         {[architectureOptions.recommended, ...architectureOptions.alternatives].map(arch => (
-                            <h2 style={{fontSize: "1.1rem"}} key={arch}>
+                            <label style={{fontSize: "1.1rem"}} key={arch}>
                             <input
                                 type="radio"
                                 value={arch}
@@ -877,12 +879,12 @@ function CreateWS(){
                                 onChange={(e) => {setDraftArch(e.target.value); setReviewNeeded(true);}}
                             />
                             {arch}
-                        </h2>
+                        </label>
                         ))}
                         </div>
 
                         <h2>Alternative Stack</h2>
-                        <div className="timeline-container">
+                        <div>
                         
                         {/* {Object.entries(stackOptions).map(([stack , options]) => (
                             <>
@@ -907,7 +909,7 @@ function CreateWS(){
                         
                         {
                             stackOptions.map(category => (
-                            <div key={category.category}>
+                            <div key={category.category} className="timeline-container">
 
                                 <h2 style={{fontSize: "1.1rem"}}>
                                     {category.category.charAt(0).toUpperCase() + category.category.slice(1)}:
@@ -915,7 +917,7 @@ function CreateWS(){
 
                                 {[category.recommended, ...category.alternatives].map(choice => (
 
-                                    <h2 key={choice} style={{fontSize: "1rem", paddingLeft: "1.5rem"}}>
+                                    <label key={choice} style={{fontSize: "1rem", paddingLeft: "1.5rem"}}>
 
                                         <input
                                             type="radio"
@@ -941,7 +943,7 @@ function CreateWS(){
 
                                         {choice}
 
-                                    </h2>
+                                    </label>
 
                                 ))}
 

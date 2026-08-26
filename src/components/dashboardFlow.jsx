@@ -398,7 +398,7 @@ function DashboardFlow() {
         preventScrolling ={false}
       >
         {/* <Background /> */}
-        {/* <Controls /> */}
+        <Controls />
       </ReactFlow>
     </div>
   );

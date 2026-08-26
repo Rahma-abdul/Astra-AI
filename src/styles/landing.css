@@ -1,5 +1,12 @@
-.landing-page {
+/* .landing-page {
     position: relative;
+} */
+
+.landing-page,
+.landing-page * {
+    box-sizing: border-box;
+    position: relative;
+  
 }
 
 /* for titles: font-family:  "Satoshi", sans-serif; color: #cdd2ef */
@@ -38,7 +45,7 @@
 .intro-auth {
     display: flex;
     align-items: center;
-    /* justify-content: space-between; */
+    justify-content: space-evenly;
     gap: 10rem;
     padding-left: 20px;
     padding-right: 20px;
@@ -50,7 +57,8 @@
     font-weight: bold;
     color: transparent;
     /* background-image: linear-gradient(to right, #160662, #24e9fb); */
-    background-image: linear-gradient(95deg,#a1edf4, #b395ea , #faa6e2);
+    background-image: linear-gradient(95deg,#53cad4, #5018b9 , #faa6e2);
+    /* background-color: white; */
     background-size: 200%; /* Enlarged for smooth animation */
     background-position: 0 50%;
     background-clip: text;
@@ -217,27 +225,50 @@
 }
 
 .problem-section {
-    display: flex;
+    /* display: flex;
     flex-direction: row;
     gap:2rem;
 
     padding-top: 30px;
     padding-left: 20px;
-    padding-right: 20px;
+    padding-right: 20px; */
 
+    width: 100%;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
+
+    padding-top: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .problem{
     
-    background: linear-gradient(to right,#5f52a141,#4f949941);
+    /* background: linear-gradient(to right,#5f52a141,#4f949941);
     backdrop-filter: blur(0.5px);
     box-shadow: 0 8px 10px #7dade7c7;
-
-    /* background: linear-gradient(135deg,#15066244,#24e9fb3c); */
     border-radius: 12px;
     width: 500px;
     padding-left: 10px;
     padding-right: 10px;
+    transition: 0.3s; */
+
+    width: 100%;
+    min-width: 0;
+
+    background: linear-gradient(to right, #5f52a141, #4f949941);
+    backdrop-filter: blur(0.5px);
+    box-shadow: 0 8px 10px #7dade7c7;
+
+    border-radius: 12px;
+
+    padding: 0 16px;
+
     transition: 0.3s;
 
 }
@@ -297,11 +328,27 @@
 }
 
 .benefit-lines-container {
-    display: flex;
-    /* justify-content: space-between; */
+    /* display: flex;
     gap: 5rem;
     justify-content: center;
-    padding-left: 2rem;
+    padding-left: 2rem; */
+
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.benefit-col{
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .benefit-lines {
@@ -383,31 +430,28 @@
 }
 
 .reward-cards{
-    display: flex;
+    /* display: flex;
     flex-direction: row;
-    gap:2rem ;
-    /* justify-content: space-between; */
+    gap:2rem ; */
+
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
 
 }
 
 .card{
-    /* background-color: #064862; */
+    width: 100%;
+    min-width: 0;
+
     background: linear-gradient(to top , #1d09826b , #1ec5d438);
-
-    /*  background: rgba(255,255,255,0.3);
-
-    backdrop-filter: blur(12px);
-
-    border: 1px solid rgba(255,255,255,0.4);
-
-    box-shadow:
-    0 8px 25px rgba(0,0,0,0.08);
-     */
-
     border-radius: 12px;
     padding: 3px;
-    /* margin: 5px; */
-    width: 250px;
+    /* width: 250px; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -477,18 +521,35 @@
 }
 
 .types-container{
-    display: flex;
+    /* display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    gap:1rem;
+    gap:1rem; */
+
+    width: 100%; 
+    max-width: 750px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
 
 }
 
+.types-col{
+    min-width: 0;
+    display: grid;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+}
+
 .type{
-    /* padding-left: 2rem; */
-    /* background-color: #160662; */
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     background: linear-gradient(to top , #94d3d94e, #aea4e24b );
-    /* border: 1px solid #0d0a4f; */
     font-size: 1.1rem;
     border-radius: 10px;   
     transition: 0.3s;
@@ -541,12 +602,205 @@
 
 .credits{
     font-family:  "Satoshi", sans-serif;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.08em;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 500;
     background: linear-gradient(to right,#28dfef 0%, #a06bff 50%, #ff5fd1 100%);
     background-clip: text;
     color: transparent;
     justify-self: flex-end;
+    
 
 }
+
+
+
+/* Responsive - Split Screen */
+@media (max-width: 900px) {
+
+    .intro-auth {
+        flex-direction: column;
+        gap: 2.5rem;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .intro-content {
+        width: 100%;
+        text-align: center;
+        padding-right: 0;
+    }
+
+    .title-masked {
+        font-size: clamp(4rem, 12vw, 5.5rem);
+    }
+
+    .tagline {
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+        text-align: center;
+    }
+
+    .logo-icon {
+        height: clamp(50px, 11vw, 80px);
+        vertical-align:middle;
+        margin-bottom: 20px;
+    }
+
+    .intro-about {
+        max-width: 650px;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+        line-height: 1.7;
+        text-align: center;
+    }
+
+    .auth1 {
+        width: min(100%, 320px);
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+    .problem-section {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem;
+        width: 500px;
+    }
+
+    .types-container {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        width: 100%; 
+        max-width: 300px;
+
+    }
+
+    .intro-about2,
+    .intro-about3{
+        font-size: 1.2rem;
+    }
+
+
+    .benefit-title,
+    .flow-title,
+    .reward-title,
+    .types-title{
+        font-size: 2rem;
+        text-align: center;
+
+    }
+
+    .flow-title{
+        text-align: left;
+    }
+
+
+    .benefit-lines-container {
+        /* grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem; */
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        width: 100%; 
+        max-width: 250px;
+        gap: 0rem;
+    }
+
+
+    .reward-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+}
+
+
+/* Responsive - Phone Screen */
+@media (max-width: 600px) {
+
+    .landing-page {
+    overflow-x: hidden;
+
+    }
+
+    .intro-auth {
+        padding-left: 12px;
+        padding-right: 12px;
+        gap: 2rem;
+    }
+
+    .title-masked {
+        font-size: clamp(3rem, 14vw, 4rem);
+        letter-spacing: -0.06em;
+    }
+
+    .tagline {
+        font-size: clamp(1.4rem, 7vw, 2rem);
+    }
+
+    .logo-icon {
+        height: 52px;
+        vertical-align:middle;
+        margin-bottom: 20px;
+    }
+
+    .intro-about {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .auth1 {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .auth-title {
+        font-size: 1.7rem;
+    }
+
+    .login-btn,
+    .signup-btn {
+        font-size: 1.15rem;
+    }
+
+
+    .problem-section {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+
+        padding-left: 12px;
+        padding-right: 12px;
+        width: 100%;
+    }
+
+    .problem {
+        padding: 4px 18px 10px;
+    }
+
+    .problem-title {
+        font-size: 1.2rem;
+    }
+
+    .problem-lines {
+        font-size: 0.95rem;
+        line-height: 1.2;
+    }
+
+    
+    .types-container {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        width: 100%; 
+        max-width: 300px;
+
+    }
+
+    .benefit-lines-container {
+        grid-template-columns: 1fr;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+
+    .reward-cards {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+} 

@@ -98,15 +98,15 @@ function Landing() {
         <section className="types-section">
           <h1 className="types-title">Supported Project Types</h1>
               <div className="types-container">
-              <div>
+              <div className="types-col">
               <div className="type"><p className="type-label"><img src="/icon5.png" className="types-icon" /> Web Development</p></div>
               <div className="type"><p className="type-label"><img src="/icon13.png" className="types-icon" />AI / ML</p></div>
               </div>
-              <div>
+              <div className="types-col">
               <div className="type"><p className="type-label"><img src="/icon3.png" className="types-icon" /> Computer Vision</p></div>
               <div className="type"><p className="type-label"><img src="/icon8.png" className="types-icon" />Robotics</p></div>
               </div>
-              <div>
+              <div className="types-col">
               <div className="type"><p className="type-label"><img src="/icon7.png" className="types-icon" />Databases</p></div>
               <div className="type"><p className="type-label"><img src="/icon12.png" className="types-icon" /> Software Engineering</p></div>
               </div>
@@ -129,15 +129,15 @@ function Landing() {
 
           <h1 className="benefit-title">Astra AI helps you</h1>
           <div className="benefit-lines-container">
-            <div>
+            <div className="benefit-col">
             <p className="benefit-lines">Define scope</p>
             <p className="benefit-lines">Choose features</p>
             </div>
-            <div>
+            <div className="benefit-col">
             <p className="benefit-lines">Understand tradeoffs</p>
             <p className="benefit-lines">Choose stack</p>
             </div>
-            <div>
+            <div className="benefit-col">
             <p className="benefit-lines">Understand architecture</p>
             <p className="benefit-lines">Discover risks</p>
             </div>
