@@ -314,6 +314,9 @@ function LandingFlow() {
         nodes={nodes}
         edges={edges}
         fitView
+        fitViewOptions={{
+                    padding: 0.2
+                    }}
         zoomOnScroll={false}
         // panOnDrag={false}
         nodesDraggable={false}

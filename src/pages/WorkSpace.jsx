@@ -495,9 +495,23 @@ function Workspace(){
                         <h1> Astra AI</h1>
                         </div>
                         <div className="ws-nav-buttons">
-                            <img src="/icon27.png" className="nav-home-icon" onClick={handleHome} />
+                            {/* <img src="/icon27.png" className="nav-home-icon" onClick={handleHome} />
                             <img src="/icon24.png" className="nav-save-icon" onClick={handleSave} />
-                            <img src="/icon25.png" className="nav-delete-icon" onClick={handleDelete} />
+                            <img src="/icon25.png" className="nav-delete-icon" onClick={handleDelete} /> */}
+                            <button className="nav-action" onClick={handleHome}>
+                                <img src="/icon27.png" alt="Home" className="nav-home-icon"/>
+                                <span>Home</span>
+                            </button>
+
+                            <button className="nav-action" onClick={handleSave}>
+                                <img src="/icon24.png" alt="Save"  className="nav-save-icon"/>
+                                <span>Save</span>
+                            </button>
+
+                            <button className="nav-action-delete" onClick={handleDelete}>
+                                <img src="/icon25.png" alt="Delete" className="nav-delete-icon"/>
+                                <span>Delete</span>
+                            </button>
                         </div>
                 </nav>
                 <div className="ws-background-image"></div>

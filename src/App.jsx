@@ -6,6 +6,8 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import CreateWS from "./pages/CreateWS";
 import Workspace from "./pages/WorkSpace";
+import ResetPassword from "./pages/ResetPass";
+
 function App() {
   return (
     <BrowserRouter>    
@@ -16,6 +18,7 @@ function App() {
         <Route path="/dashboard" element ={<Dashboard/>}/>
         <Route path="/createWS" element={<CreateWS/>}/>
         <Route path="/WS/:id?" element={<Workspace />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
   );

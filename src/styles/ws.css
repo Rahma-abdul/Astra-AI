@@ -78,10 +78,8 @@
     display: flex;
     flex-direction: row;
     gap: 0.6rem;
-    margin-top: 4px;
-    margin-right: 80px;
-
-
+    margin-top: 2px;
+    margin-right: 100px;
 }
 
 
@@ -92,34 +90,73 @@
     margin-top: 13px;
 }
 
+.nav-action{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0rem;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    background: transparent;
+    border: none;
+}
+
+
+.nav-action-delete{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0rem;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    background: transparent;
+    border: none;
+    margin-left: 30px;
+}
+
 .nav-home-icon{
     position: relative;
-    height: 48px;
+    height: 45px;
     vertical-align:baseline;
     transition: transform 0.2s ease-in-out;
+    margin-bottom: -4px;
 }
 
 .nav-save-icon{
     position: relative;
-    height: 45px;
+    height: 43px;
     vertical-align:baseline;
-    margin-left: 10px;
+    /* margin-left: 10px; */
     transition: transform 0.2s ease-in-out;
+    margin-bottom: -2px;
 }
 
 .nav-delete-icon{
     position: relative;
-    height: 36px;
+    height: 33px;
     margin-top: 4px;
     vertical-align:baseline;
-    margin-left: 40px;
-    transition: transform 0.2s ease-in-out;
-    
+    /* margin-left: 40px; */
+    transition: transform 0.2s ease-in-out;  
+    margin-bottom: 3px;
 }
 
-.nav-save-icon:hover,
-.nav-home-icon:hover,
-.nav-delete-icon:hover{
+.nav-action span,
+.nav-action-delete span{
+    font-size: 0.65rem;
+    color: #fffffff5;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+    font-family:  "Inter", sans-serif;
+    letter-spacing: -0.05em;
+    text-align: center;
+    margin-top: 0px;
+}
+
+
+.nav-action:hover .nav-save-icon,
+.nav-action:hover .nav-home-icon,
+.nav-action-delete:hover .nav-delete-icon{
     transform: scale(1.1);
     transition: transform 0.2s ease-in-out;
     cursor: pointer;
@@ -513,7 +550,7 @@
         height: 3rem;
         flex-wrap: wrap;
         justify-content: space-around;
-        gap: 3.5rem;
+        gap: 4rem;
     }
 
         
@@ -523,8 +560,9 @@
     }
 
     .ws-nav-buttons{
-        gap: 0.1rem;
-        margin-top: 13px;
+        gap: 0.2rem;
+        /* margin-top: 10px; */
+        /* margin-right: 10px; */
     }
 
 
@@ -535,11 +573,15 @@
         margin-left: -15px;
         
     }
+            
+    .nav-action span, .nav-action-delete span{
+        font-size: 0.58rem;
+    }
+
 
     .nav-home-icon{
         height: 40px;
         vertical-align:baseline;
-        
     }
 
     .nav-save-icon{
@@ -551,8 +593,12 @@
     .nav-delete-icon{
         height: 28px;
         vertical-align:baseline;
-        margin-left: 15px;
+        /* margin-left: 15px; */
         
+    }
+
+    .nav-action-delete{
+        margin-left: 20px;
     }
 }
 
@@ -565,4 +611,44 @@
     .locked::after {
         padding-right: 0;
     }
+
+    .ws-nav{
+        font-size: 0.55em;
+        gap: 2.6rem;
+        justify-content:space-evenly;
+    }
+
+    .ws-nav-buttons{
+        margin-top: 10px;
+        margin-left: 1px;
+    }
+    
+    .nav-action span, .nav-action-delete span{
+        font-size: 0.5rem;
+    }
+
+    
+    .nav-action-delete{
+        margin-left: 10px;
+    }
+
+    
+    .nav-home-icon{
+        height: 30px;
+        vertical-align:baseline;
+    }
+
+    .nav-save-icon{
+        height: 27px;
+        vertical-align:baseline;
+        margin-left: 3px;
+    }
+
+    .nav-delete-icon{
+        height: 18px;
+        vertical-align:baseline;
+        /* margin-left: 15px; */
+        
+    }
+
 }
