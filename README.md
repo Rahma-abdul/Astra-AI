@@ -55,7 +55,8 @@ The application takes information about a project and uses AI-assisted generatio
 
 The resulting workspace becomes a reference that the developer can return to throughout the development process.
 
-![alt text](image-7.png)
+<img width="476" height="195" alt="Screenshot 2026-09-06 003955" src="https://github.com/user-attachments/assets/34938f57-3c76-429d-982e-28b2ef6fc956" />
+
 
 ### What Astra AI does
 
@@ -134,7 +135,8 @@ Resources can include:
 - Video Tutorials
 - Articles
 
-![alt text](image-4.png)
+<img width="947" height="425" alt="Screenshot 2026-09-06 003414" src="https://github.com/user-attachments/assets/5ad93d0f-e1af-4400-bc28-5527952654e6" />
+
 
 ## Smart Checklist
 
@@ -156,7 +158,8 @@ A developer can therefore track both:
 * Concepts they need to learn
 * Development work they need to complete
 
-![alt text](image-5.png)
+<img width="938" height="407" alt="Screenshot 2026-09-06 003458" src="https://github.com/user-attachments/assets/f5d29796-f690-46ac-b0e3-e176fdde515c" />
+
 
 ## Progress Tracking
 
@@ -173,7 +176,8 @@ One of Astra AI's main visual components is an automatically generated implement
 The roadmap represents development work as a directed graph rather than a simple sequential list. With each node representing a meaningful implementation milestone, while edges represent dependencies between tasks.
 
 For example:
-![alt text](image.png)
+<img width="938" height="395" alt="Screenshot 2026-09-05 233716" src="https://github.com/user-attachments/assets/e12bf0c2-f3ec-4a2e-b73e-988bdba31527" />
+
 
 This allows the roadmap to represent projects where:
 
@@ -211,7 +215,8 @@ The resulting positions are converted into React Flow node positions. The roadma
 
 Astra AI also generates an architecture representation of the proposed system. The architecture information and selected technology stack are stored together so that the application can retain the structure generated during planning.
 
-![alt text](image-1.png)
+<img width="936" height="416" alt="Screenshot 2026-09-05 234755" src="https://github.com/user-attachments/assets/e9c35a3a-4d24-4dbf-b6e7-ceec7d4c3bb4" />
+
 
 ---
 
@@ -230,8 +235,10 @@ These materials are intended to help the developer communicate the project after
 
 This makes the documentation stage part of the overall project workflow rather than an isolated generation feature.
 
-![alt text](image-2.png)
-![alt text](image-3.png)
+<img width="951" height="133" alt="Screenshot 2026-09-05 234923" src="https://github.com/user-attachments/assets/399c28f0-534c-46c3-bf86-d260fc998f23" />
+<img width="953" height="431" alt="Screenshot 2026-09-05 235015" src="https://github.com/user-attachments/assets/73b77b73-0e4b-4b46-9cb9-ee44893513b4" />
+
+
 
 ---
 
@@ -282,7 +289,8 @@ The workspace table contains the persistent state of a user's project planning w
 The majority of generated project information is stored as **JSONB**.
 
 
-![alt text](image-6.png)
+<img width="478" height="268" alt="Screenshot 2026-09-06 003645" src="https://github.com/user-attachments/assets/1526f92f-6c26-4033-962f-3ce724e97c4c" />
+
 
 ---
 
