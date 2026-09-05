@@ -31,9 +31,6 @@ The goal is to make project development more deliberate and educational: the dev
 - [Project Architecture](#project-architecture)
 - [Why Astra AI?](#why-astra-ai)
 - [Project Goals](#project-goals)
-
-
--
 ---
 
 ## Overview
@@ -91,15 +88,12 @@ Astra AI takes a project idea and helps transform it into a structured developme
 
 The planning process considers the project's scope, features, technical requirements, architecture, feasibility, and implementation requirements rather than treating the original idea as an isolated prompt.
 
----
-
 ## Feature Planning
 
 Projects can be broken down into meaningful features that become part of the broader planning process.
 
 These features are subsequently used as context for other generated sections of the workspace, allowing the generated architecture, roadmap, and learning requirements to remain connected to the project definition.
 
----
 
 ## Technical Feasibility
 
@@ -305,7 +299,7 @@ Different Gemini models are used for different tasks.
 | Checklist | Gemini 3.5 Flash Lite |
 | Learning resources | Gemini 3.5 Flash Lite |
 | Architecture map | Gemini 3.5 Flash Lite |
-| Roadmap | Gemini 3.5 Flash |
+| Roadmap | Gemini 3 Flash |
 | Documentation | Gemini 3.6 Flash |
 
 The intention is to match model capability and generation cost to the complexity of the task rather than using the same model indiscriminately.
